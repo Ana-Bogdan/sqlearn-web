@@ -1,0 +1,151 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-logo: var(--font-logo);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* SQLearn design system colors */
+  --color-pale-oak: #DECAA9;
+  --color-dusk: #3E5570;
+  --color-taupe: #463C33;
+  --color-light-mauve: #B999A4;
+
+  /* Easing tokens */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* SQLearn Light Theme (default — no dark mode) */
+:root {
+  --background: #DECAA9;        /* Pale Oak */
+  --foreground: #463C33;        /* Taupe */
+  --card: #EAD9BE;
+  --card-foreground: #463C33;
+  --popover: #F5ECDF;
+  --popover-foreground: #463C33;
+  --primary: #3E5570;           /* Dusk */
+  --primary-foreground: #F5ECDF;
+  --secondary: #B999A4;         /* Light Mauve */
+  --secondary-foreground: #FFFFFF;
+  --muted: #CDB896;
+  --muted-foreground: #6B5D50;
+  --accent: #B999A4;            /* Light Mauve */
+  --accent-foreground: #463C33;
+  --destructive: #DC2626;
+  --border: #C4AD8A;
+  --input: #C4AD8A;
+  --ring: #3E5570;              /* Dusk */
+  --chart-1: #3E5570;
+  --chart-2: #B999A4;
+  --chart-3: #463C33;
+  --chart-4: #DECAA9;
+  --chart-5: #6B5D50;
+  --radius: 0.625rem;
+  --sidebar: #3E5570;           /* Dusk */
+  --sidebar-foreground: #F5ECDF;
+  --sidebar-primary: #DECAA9;
+  --sidebar-primary-foreground: #463C33;
+  --sidebar-accent: #4D6680;
+  --sidebar-accent-foreground: #F5ECDF;
+  --sidebar-border: #4D6680;
+  --sidebar-ring: #B999A4;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Staggered fade-in for page elements */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-fade-up {
+  animation: fade-up 600ms var(--ease-out-quart) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 500ms var(--ease-out-quart) both;
+}
+
+.animate-float {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-in {
+    animation: fade-in 200ms ease-out both;
+  }
+  .animate-float {
+    animation: none;
+  }
+}
