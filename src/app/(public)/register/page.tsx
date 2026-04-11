@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { RegisterIllustration } from "@/components/illustrations";
 import { TiltScene } from "@/components/tilt-scene";
@@ -5,6 +6,22 @@ import { TiltScene } from "@/components/tilt-scene";
 export default function RegisterPage() {
   return (
     <div className="relative z-[2] flex flex-1">
+      {/* Brand link — top-right corner */}
+      <Link
+        href="/"
+        aria-label="SQLearn"
+        className="absolute right-6 top-6 z-10 lg:right-10 lg:top-8"
+      >
+        <Image
+          src="/sqlearn-logo.svg"
+          alt="SQLearn"
+          width={1427}
+          height={516}
+          priority
+          className="h-16 w-auto"
+        />
+      </Link>
+
       {/* Left: Illustration panel — framed parchment card */}
       <div className="hidden w-[46%] items-center justify-center px-12 lg:flex">
         <TiltScene className="relative w-full max-w-[420px]">
@@ -27,18 +44,6 @@ export default function RegisterPage() {
       {/* Right: Form */}
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-16 lg:px-16">
         <div className="w-full max-w-sm">
-          {/* Brand link */}
-          <Link
-            href="/"
-            className="animate-fade-up group mb-12 inline-block font-logo text-2xl italic tracking-[-0.02em]"
-            style={{ animationDelay: "0ms" }}
-          >
-            <span className="text-dusk transition-colors duration-300 ease-out">SQL</span>
-            <span className="text-light-mauve transition-colors duration-300 ease-out group-hover:text-dusk">
-              earn
-            </span>
-          </Link>
-
           <h1
             className="animate-fade-up text-[2.125rem] font-bold leading-[1.1] tracking-[-0.025em] text-taupe"
             style={{ animationDelay: "80ms" }}

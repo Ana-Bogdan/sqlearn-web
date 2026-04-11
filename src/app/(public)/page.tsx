@@ -1,16 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { HeroIllustration } from "@/components/illustrations";
 import { TiltScene } from "@/components/tilt-scene";
-
-const wordmarkLetters = [
-  { ch: "S", className: "text-dusk" },
-  { ch: "Q", className: "text-dusk" },
-  { ch: "L", className: "text-dusk" },
-  { ch: "e", className: "text-light-mauve" },
-  { ch: "a", className: "text-light-mauve" },
-  { ch: "r", className: "text-light-mauve" },
-  { ch: "n", className: "text-light-mauve" },
-];
 
 export default function Home() {
   return (
@@ -23,25 +14,21 @@ export default function Home() {
         <div className="grid w-full items-center gap-x-8 gap-y-10 lg:grid-cols-12">
           {/* Content — left, hard-aligned to col 1 */}
           <div className="lg:col-span-7 lg:col-start-1">
-            <h1
-              aria-label="SQLearn"
-              className="font-logo italic leading-[0.84] tracking-[-0.045em]"
-              style={{ fontSize: "clamp(5.25rem, 13vw, 11.5rem)" }}
-            >
-              {wordmarkLetters.map((letter, i) => (
-                <span
-                  key={i}
-                  aria-hidden="true"
-                  className={`animate-letter wordmark-letter ${letter.className}`}
-                  style={{ animationDelay: `${i * 70}ms` }}
-                >
-                  {letter.ch}
-                </span>
-              ))}
+            <h1 aria-label="SQLearn" className="animate-fade-up -mt-12 flex leading-none lg:-mt-20">
+              <Image
+                src="/sqlearn-logo.svg"
+                alt="SQLearn"
+                width={1427}
+                height={516}
+                priority
+                aria-hidden="true"
+                className="block w-auto"
+                style={{ height: "clamp(9rem, 21vw, 18rem)" }}
+              />
             </h1>
 
             <p
-              className="animate-fade-up mt-7 max-w-[46ch] text-[1.125rem] leading-[1.65] text-taupe/85 lg:text-[1.3125rem] lg:leading-[1.55]"
+              className="animate-fade-up -mt-7 max-w-[46ch] text-[1.125rem] leading-[1.65] text-taupe/85 lg:text-[1.3125rem] lg:leading-[1.55]"
               style={{ animationDelay: "650ms" }}
             >
               Master SQL through hands-on exercises and real-time feedback.

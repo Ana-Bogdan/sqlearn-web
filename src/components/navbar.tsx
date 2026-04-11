@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -12,14 +13,17 @@ export function Navbar() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6 lg:px-8">
         <Link
           href="/"
-          className="group font-logo text-xl italic tracking-[-0.02em] text-primary-foreground"
+          aria-label="SQLearn"
+          className="inline-flex items-center"
         >
-          <span className="inline-block transition-transform duration-500 ease-out group-hover:-translate-x-[1px]">
-            SQL
-          </span>
-          <span className="inline-block text-light-mauve transition-all duration-500 ease-out group-hover:translate-x-[1px] group-hover:text-[#FFFFFB]">
-            earn
-          </span>
+          <Image
+            src="/sqlearn-logo.svg"
+            alt="SQLearn"
+            width={1427}
+            height={516}
+            priority
+            className="h-7 w-auto"
+          />
         </Link>
 
         <div className="flex items-center gap-1">
