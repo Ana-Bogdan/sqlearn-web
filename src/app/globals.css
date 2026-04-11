@@ -48,7 +48,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 
   /* SQLearn design system colors */
-  --color-pale-oak: #DECAA9;
+  --color-pale-oak: #FAF7F0;
   --color-dusk: #3E5570;
   --color-taupe: #463C33;
   --color-light-mauve: #B999A4;
@@ -60,36 +60,36 @@
 
 /* SQLearn Light Theme (default — no dark mode) */
 :root {
-  --background: #DECAA9;        /* Pale Oak */
+  --background: #FAF7F0;        /* Pale Oak (warm off-white) */
   --foreground: #463C33;        /* Taupe */
-  --card: #EAD9BE;
+  --card: #FFFDF8;
   --card-foreground: #463C33;
-  --popover: #F5ECDF;
+  --popover: #FFFFFB;
   --popover-foreground: #463C33;
   --primary: #3E5570;           /* Dusk */
-  --primary-foreground: #F5ECDF;
+  --primary-foreground: #FFFFFB;
   --secondary: #B999A4;         /* Light Mauve */
   --secondary-foreground: #FFFFFF;
-  --muted: #CDB896;
+  --muted: #EFE9D8;
   --muted-foreground: #6B5D50;
   --accent: #B999A4;            /* Light Mauve */
   --accent-foreground: #463C33;
   --destructive: #DC2626;
-  --border: #C4AD8A;
-  --input: #C4AD8A;
+  --border: #E2DAC2;
+  --input: #E2DAC2;
   --ring: #3E5570;              /* Dusk */
   --chart-1: #3E5570;
   --chart-2: #B999A4;
   --chart-3: #463C33;
-  --chart-4: #DECAA9;
+  --chart-4: #FAF7F0;
   --chart-5: #6B5D50;
   --radius: 0.625rem;
   --sidebar: #3E5570;           /* Dusk */
-  --sidebar-foreground: #F5ECDF;
-  --sidebar-primary: #DECAA9;
+  --sidebar-foreground: #FFFFFB;
+  --sidebar-primary: #FAF7F0;
   --sidebar-primary-foreground: #463C33;
   --sidebar-accent: #4D6680;
-  --sidebar-accent-foreground: #F5ECDF;
+  --sidebar-accent-foreground: #FFFFFB;
   --sidebar-border: #4D6680;
   --sidebar-ring: #B999A4;
 }
@@ -106,11 +106,14 @@
   }
 }
 
-/* Staggered fade-in for page elements */
+/* ──────────────────────────────────────────────────────────
+   Motion system
+   ────────────────────────────────────────────────────────── */
+
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -123,29 +126,144 @@
   to { opacity: 1; }
 }
 
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+/* Three different float curves so layered elements never sync up */
+@keyframes float-a {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -14px, 0); }
+}
+
+@keyframes float-b {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(4px, -10px, 0); }
+}
+
+@keyframes float-c {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(-6px, 8px, 0); }
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  33%      { transform: translate3d(-3px, -5px, 0); }
+  66%      { transform: translate3d(4px, 3px, 0); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: var(--twinkle-min, 0.18); }
+  50%      { opacity: var(--twinkle-max, 0.55); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1);    opacity: var(--pulse-min, 0.3); }
+  50%      { transform: scale(1.18); opacity: var(--pulse-max, 0.55); }
+}
+
+/* Animated dashed connection lines — data flowing through paths */
+@keyframes dash-flow {
+  to { stroke-dashoffset: -40; }
+}
+
+@keyframes letter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px) rotate(-2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
 }
 
 .animate-fade-up {
-  animation: fade-up 600ms var(--ease-out-quart) both;
+  animation: fade-up 700ms var(--ease-out-expo) both;
 }
 
 .animate-fade-in {
-  animation: fade-in 500ms var(--ease-out-quart) both;
+  animation: fade-in 600ms var(--ease-out-quart) both;
 }
 
-.animate-float {
-  animation: float-slow 6s ease-in-out infinite;
+.animate-letter {
+  display: inline-block;
+  animation: letter-rise 900ms var(--ease-out-expo) both;
+  transform-origin: 50% 100%;
+}
+
+/* Per-element float utilities (for SVG <g> children) */
+.float-a { animation: float-a 7s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.float-b { animation: float-b 9s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.float-c { animation: float-c 11s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.float-drift { animation: drift 13s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+.twinkle  { animation: twinkle 4s ease-in-out infinite; }
+.twinkle-slow { animation: twinkle 7s ease-in-out infinite; }
+.pulse-soft { animation: pulse-soft 5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+.dash-flow { animation: dash-flow 2.4s linear infinite; }
+.dash-flow-slow { animation: dash-flow 4s linear infinite; }
+.dash-flow-reverse { animation: dash-flow 3s linear infinite reverse; }
+
+/* Parallax tilt host — children read --mx, --my (range -1..1) */
+.parallax-host {
+  --mx: 0;
+  --my: 0;
+  transition: --mx 600ms var(--ease-out-expo), --my 600ms var(--ease-out-expo);
+}
+
+.parallax-layer {
+  transform: translate3d(
+    calc(var(--mx) * var(--depth, 8px)),
+    calc(var(--my) * var(--depth, 8px)),
+    0
+  );
+  transition: transform 400ms var(--ease-out-expo);
+  will-change: transform;
+}
+
+/* Editorial wordmark — display:inline-block per letter so floats don't fight stagger */
+.wordmark-letter {
+  display: inline-block;
+}
+
+/* Grain overlay — barely-there parchment noise */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.27  0 0 0 0 0.23  0 0 0 0 0.20  0 0 0 0.12 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 200px 200px;
+}
+
+/* Material lift shadow tinted with brand Dusk (no generic drop shadow) */
+.shadow-dusk {
+  box-shadow:
+    0 1px 0 0 rgb(255 255 255 / 0.18) inset,
+    0 1px 2px rgb(62 85 112 / 0.18),
+    0 8px 24px -8px rgb(62 85 112 / 0.35);
+}
+
+.shadow-dusk-hover:hover {
+  box-shadow:
+    0 1px 0 0 rgb(255 255 255 / 0.22) inset,
+    0 2px 4px rgb(62 85 112 / 0.22),
+    0 14px 32px -10px rgb(62 85 112 / 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
-  .animate-fade-in {
+  .animate-fade-in,
+  .animate-letter {
     animation: fade-in 200ms ease-out both;
+    transform: none;
   }
-  .animate-float {
+  .float-a, .float-b, .float-c, .float-drift,
+  .twinkle, .twinkle-slow, .pulse-soft,
+  .dash-flow, .dash-flow-slow, .dash-flow-reverse {
     animation: none;
+  }
+  .parallax-layer {
+    transform: none;
   }
 }

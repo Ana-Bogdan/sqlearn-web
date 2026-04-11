@@ -3,5 +3,10 @@ export default function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <main className="flex-1 flex flex-col">{children}</main>;
+  return (
+    <main className="relative flex flex-1 flex-col">
+      <div className="grain-overlay" aria-hidden="true" />
+      {children}
+    </main>
+  );
 }
