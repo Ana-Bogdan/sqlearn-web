@@ -111,6 +111,53 @@ export const STRINGS = {
     HEADING: "Dashboard",
     SUBHEADING: "Your learning progress at a glance.",
   },
+  LEARN: {
+    EYEBROW: "Curriculum",
+    HEADING: "Your SQL journey",
+    SUBHEADING:
+      "Work through chapters at your own pace. Each lesson ends with hands-on exercises in the sandbox.",
+    EMPTY_HEADING: "No chapters are published yet.",
+    EMPTY_BODY:
+      "Ask an instructor to publish the first chapter, or check back shortly.",
+    LOADING: "Gathering your chapters…",
+    LOAD_ERROR: "We couldn't load your chapters. Refresh to try again.",
+    SUMMARY_EXERCISES: (done: number, total: number) =>
+      `${done} of ${total} exercises mastered`,
+    CHAPTER_LABEL: "Chapter",
+    EXERCISES_LABEL: "exercises",
+    NOT_STARTED: "Start chapter",
+    IN_PROGRESS: "Resume",
+    COMPLETE: "Review",
+    EMPTY_CHAPTER: "This chapter has no lessons yet.",
+    STATUS: {
+      not_started: "Not started",
+      attempted: "In progress",
+      completed: "Completed",
+    },
+  },
+  LESSON: {
+    BACK: "Back to curriculum",
+    EXERCISES_HEADING: "Exercises",
+    QUIZZES_HEADING: "Chapter quiz",
+    NO_EXERCISES: "This lesson has no exercises yet.",
+    LESSON_PROGRESS: (done: number, total: number) =>
+      `${done} / ${total} exercises`,
+    PREV_LESSON: "Previous",
+    NEXT_LESSON: "Next",
+    LOADING: "Loading lesson…",
+    LOAD_ERROR: "We couldn't load this lesson. Refresh to try again.",
+    THEORY_EMPTY: "No theory content has been written for this lesson yet.",
+    DIFFICULTY: {
+      easy: "Easy",
+      medium: "Medium",
+      hard: "Hard",
+    },
+    CHAPTER_QUIZ_BADGE: "Quiz",
+    NOT_STARTED: "Start",
+    IN_PROGRESS: "Continue",
+    COMPLETE: "Done",
+  },
+
   FORM: {
     SHOW_PASSWORD: "Show password",
     HIDE_PASSWORD: "Hide password",
