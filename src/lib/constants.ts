@@ -6,10 +6,6 @@ export const STRINGS = {
   BRAND: {
     NAME: "SQLearn",
   },
-  NAV: {
-    LOG_IN: "Log in",
-    REGISTER: "Register",
-  },
   HOME: {
     TAGLINE_LEAD:
       "Master SQL through hands-on exercises and real-time feedback. A structured path from your first",
@@ -26,6 +22,18 @@ export const STRINGS = {
     CAPTION: "Tables · Joins · Aggregations",
     FOOTER_PROMPT: "Don't have an account?",
     FOOTER_LINK: "Register",
+    EMAIL_LABEL: "Email",
+    EMAIL_PLACEHOLDER: "you@example.com",
+    PASSWORD_LABEL: "Password",
+    PASSWORD_PLACEHOLDER: "••••••••",
+    FORGOT_LINK: "Forgot password?",
+    SUBMIT: "Sign in",
+    SUBMIT_PENDING: "Signing in…",
+    ERRORS: {
+      EMAIL_REQUIRED: "Enter your email.",
+      PASSWORD_REQUIRED: "Enter your password.",
+      FALLBACK: "We couldn't sign you in. Please try again.",
+    },
   },
   REGISTER: {
     HEADING: "Create your account",
@@ -33,9 +41,78 @@ export const STRINGS = {
     CAPTION: "Schemas · Relations · Results",
     FOOTER_PROMPT: "Already have an account?",
     FOOTER_LINK: "Log in",
+    FIRST_NAME_LABEL: "First name",
+    FIRST_NAME_PLACEHOLDER: "John",
+    LAST_NAME_LABEL: "Last name",
+    LAST_NAME_PLACEHOLDER: "Doe",
+    EMAIL_LABEL: "Email",
+    EMAIL_PLACEHOLDER: "you@example.com",
+    PASSWORD_LABEL: "Password",
+    PASSWORD_PLACEHOLDER: "At least 8 characters",
+    SUBMIT: "Create account",
+    SUBMIT_PENDING: "Creating account…",
+    ERRORS: {
+      FIRST_NAME_REQUIRED: "Enter your first name.",
+      LAST_NAME_REQUIRED: "Enter your last name.",
+      EMAIL_REQUIRED: "Enter your email.",
+      PASSWORD_REQUIRED: "Choose a password.",
+      FALLBACK:
+        "We couldn't create your account. Please check the form and try again.",
+    },
+  },
+  FORGOT_PASSWORD: {
+    HEADING: "Forgot your password?",
+    SUBHEADING:
+      "Enter the email you signed up with and we'll send you a reset link.",
+    CAPTION: "Recover · Reset · Resume",
+    SUCCESS:
+      "If an account exists for that email, a reset link is on its way. Check your inbox.",
+    SUBMIT: "Send reset link",
+    SUBMIT_PENDING: "Sending…",
+    BACK_PROMPT: "Remembered it?",
+    BACK_LINK: "Back to log in",
+    EMAIL_LABEL: "Email",
+    EMAIL_PLACEHOLDER: "you@example.com",
+    ERRORS: {
+      EMAIL_REQUIRED: "Enter your email.",
+      FALLBACK: "Something went wrong. Please try again.",
+    },
+  },
+  RESET_PASSWORD: {
+    HEADING: "Choose a new password",
+    SUBHEADING: "Pick something you'll remember.",
+    CAPTION: "Secure · Save · Sign in",
+    SUCCESS: "Your password is updated. You can sign in with it now.",
+    SUBMIT: "Update password",
+    SUBMIT_PENDING: "Updating…",
+    BACK_TO_LOGIN: "Go to log in",
+    NEW_PASSWORD_LABEL: "New password",
+    NEW_PASSWORD_PLACEHOLDER: "At least 8 characters",
+    CONFIRM_PASSWORD_LABEL: "Confirm password",
+    CONFIRM_PASSWORD_PLACEHOLDER: "Re-enter your new password",
+    REQUEST_NEW_LINK: "Request a new link.",
+    ERRORS: {
+      PASSWORD_REQUIRED: "Enter a new password.",
+      PASSWORD_MISMATCH: "Passwords don't match.",
+      FALLBACK: "We couldn't update your password. Please try again.",
+    },
+  },
+  PASSWORD: {
+    HINT: "At least 8 characters with an uppercase letter, a lowercase letter, a number, and a symbol.",
+    MISSING_PREFIX: "Password must include ",
+    MISSING_SUFFIX: ".",
+    MISSING_LENGTH: (n: number) => `at least ${n} characters`,
+    MISSING_UPPERCASE: "an uppercase letter",
+    MISSING_LOWERCASE: "a lowercase letter",
+    MISSING_NUMBER: "a number",
+    MISSING_SYMBOL: "a symbol",
   },
   DASHBOARD: {
     HEADING: "Dashboard",
     SUBHEADING: "Your learning progress at a glance.",
+  },
+  FORM: {
+    SHOW_PASSWORD: "Show password",
+    HIDE_PASSWORD: "Hide password",
   },
 } as const;

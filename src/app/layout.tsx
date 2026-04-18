@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Albert_Sans, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { AuthProvider } from "@/components/auth-provider";
 import { STRINGS } from "@/lib/constants";
 import "./globals.css";
 
@@ -50,7 +51,7 @@ export default function RootLayout({
       className={`${albertSans.variable} ${jetbrainsMono.variable} ${elagern.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

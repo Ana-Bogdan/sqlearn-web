@@ -2,18 +2,37 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { STRINGS } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/auth-store";
 
 export function Navbar() {
-  const pathname = usePathname();
+  const router = useRouter();
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function handleLogout() {
+    if (signingOut) return;
+    setSigningOut(true);
+    try {
+      await logout();
+      router.replace("/login");
+    } finally {
+      setSigningOut(false);
+    }
+  }
+
+  const displayName = user
+    ? [user.first_name, user.last_name].filter(Boolean).join(" ") || user.email
+    : "";
 
   return (
     <nav className="relative z-[3] border-b border-dusk/20 bg-dusk shadow-[0_1px_0_rgb(255_255_255_/_0.06)_inset]">
       <div className="flex h-16 items-center justify-between pl-4 pr-6 lg:pr-8">
         <Link
-          href="/"
+          href="/dashboard"
           aria-label={STRINGS.BRAND.NAME}
           className="inline-flex items-center"
         >
@@ -23,29 +42,29 @@ export function Navbar() {
             width={1427}
             height={516}
             priority
-            className="h-15 w-auto"
+            className="h-12 w-auto"
           />
         </Link>
 
-        <div className="flex items-center gap-1">
-          <Link
-            href="/login"
-            className={cn(
-              "rounded-md px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-out",
-              pathname === "/login"
-                ? "bg-white/15 text-primary-foreground"
-                : "text-primary-foreground/80 hover:bg-white/10 hover:text-primary-foreground"
-            )}
-          >
-            {STRINGS.NAV.LOG_IN}
-          </Link>
-          <Link
-            href="/register"
-            className="rounded-md bg-light-mauve/90 px-4 py-1.5 text-sm font-semibold tracking-[-0.005em] text-white shadow-[0_1px_0_rgb(255_255_255_/_0.25)_inset,0_2px_8px_-2px_rgb(185_153_164_/_0.5)] transition-all duration-300 ease-out hover:-translate-y-[1px] hover:bg-light-mauve"
-          >
-            {STRINGS.NAV.REGISTER}
-          </Link>
-        </div>
+        {user ? (
+          <div className="flex items-center gap-3">
+            <span
+              className="hidden text-sm font-medium text-primary-foreground/90 sm:inline"
+              title={user.email}
+            >
+              {displayName}
+            </span>
+            <button
+              type="button"
+              onClick={handleLogout}
+              disabled={signingOut}
+              aria-busy={signingOut || undefined}
+              className="rounded-md bg-white/10 px-3.5 py-1.5 text-sm font-medium text-primary-foreground/90 transition-all duration-300 ease-out hover:bg-white/15 hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {signingOut ? "Signing out…" : "Log out"}
+            </button>
+          </div>
+        ) : null}
       </div>
     </nav>
   );

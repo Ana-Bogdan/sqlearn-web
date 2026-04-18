@@ -1,11 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { GuestGuard } from "@/components/guest-guard";
 import { RegisterIllustration } from "@/components/illustrations";
+import { RegisterForm } from "@/components/register-form";
 import { TiltScene } from "@/components/tilt-scene";
 import { STRINGS } from "@/lib/constants";
 
 export default function RegisterPage() {
   return (
+    <GuestGuard>
     <div className="relative z-[2] flex flex-1">
       {/* Brand link — top-right corner */}
       <Link
@@ -58,20 +61,7 @@ export default function RegisterPage() {
             {STRINGS.REGISTER.SUBHEADING}
           </p>
 
-          {/* Registration form will be added in Milestone 4 */}
-          <div
-            className="animate-fade-up mt-10 space-y-3"
-            style={{ animationDelay: "220ms" }}
-          >
-            <div className="flex gap-3">
-              <div className="h-12 flex-1 rounded-[10px] border border-border/80 bg-popover/70" />
-              <div className="h-12 flex-1 rounded-[10px] border border-border/80 bg-popover/70" />
-            </div>
-            <div className="h-12 rounded-[10px] border border-border/80 bg-popover/70" />
-            <div className="h-12 rounded-[10px] border border-border/80 bg-popover/70" />
-            <div className="h-12 rounded-[10px] border border-border/80 bg-popover/70" />
-            <div className="shadow-dusk h-12 rounded-[10px] bg-dusk" />
-          </div>
+          <RegisterForm />
 
           <p
             className="animate-fade-up mt-8 text-sm text-muted-foreground"
@@ -88,5 +78,6 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+    </GuestGuard>
   );
 }
