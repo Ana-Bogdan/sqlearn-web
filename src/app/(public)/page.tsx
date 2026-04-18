@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeroIllustration } from "@/components/illustrations";
 import { TiltScene } from "@/components/tilt-scene";
+import { STRINGS } from "@/lib/constants";
 
 export default function Home() {
   return (
@@ -14,10 +15,10 @@ export default function Home() {
         <div className="grid w-full items-center gap-x-8 gap-y-10 lg:grid-cols-12">
           {/* Content — left, hard-aligned to col 1 */}
           <div className="lg:col-span-7 lg:col-start-1">
-            <h1 aria-label="SQLearn" className="animate-fade-up -mt-12 flex leading-none lg:-mt-20">
+            <h1 aria-label={STRINGS.BRAND.NAME} className="animate-fade-up -mt-12 flex leading-none lg:-mt-20">
               <Image
                 src="/sqlearn-logo.svg"
-                alt="SQLearn"
+                alt={STRINGS.BRAND.NAME}
                 width={1427}
                 height={516}
                 priority
@@ -31,12 +32,11 @@ export default function Home() {
               className="animate-fade-up -mt-7 max-w-[46ch] text-[1.125rem] leading-[1.65] text-taupe/85 lg:text-[1.3125rem] lg:leading-[1.55]"
               style={{ animationDelay: "650ms" }}
             >
-              Master SQL through hands-on exercises and real-time feedback.
-              A structured path from your first{" "}
+              {STRINGS.HOME.TAGLINE_LEAD}{" "}
               <span className="inline-flex translate-y-[1px] items-center rounded-[5px] border border-dusk/15 bg-popover/80 px-[0.45em] py-[0.15em] font-mono text-[0.78em] font-medium tracking-tight text-dusk shadow-[0_1px_0_rgb(255_255_255_/_0.45)_inset,0_1px_0_rgb(62_85_112_/_0.08)]">
-                SELECT *
+                {STRINGS.HOME.TAGLINE_SNIPPET}
               </span>{" "}
-              to confident querying.
+              {STRINGS.HOME.TAGLINE_TAIL}
             </p>
 
             <div
@@ -47,7 +47,7 @@ export default function Home() {
                 href="/register"
                 className="group shadow-dusk shadow-dusk-hover inline-flex h-[3.125rem] items-center gap-2 rounded-[11px] bg-dusk pl-7 pr-5 text-[0.9375rem] font-semibold tracking-[-0.005em] text-primary-foreground transition-all duration-300 ease-out hover:-translate-y-[1px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dusk active:translate-y-0"
               >
-                Get started
+                {STRINGS.HOME.CTA_PRIMARY}
                 <svg
                   width="18"
                   height="18"
@@ -69,7 +69,7 @@ export default function Home() {
                 href="/login"
                 className="inline-flex h-[3.125rem] items-center rounded-[11px] border border-taupe/20 bg-card/40 px-7 text-[0.9375rem] font-medium text-taupe transition-all duration-300 ease-out hover:-translate-y-[1px] hover:border-taupe/35 hover:bg-card/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dusk active:translate-y-0"
               >
-                Log in
+                {STRINGS.HOME.CTA_SECONDARY}
               </Link>
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function Home() {
             className="animate-fade-up text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-taupe/55"
             style={{ animationDelay: "950ms" }}
           >
-            Built for university students learning databases for the first time
+            {STRINGS.HOME.FOOTER_NOTE}
           </p>
           <div className="h-px flex-1 bg-taupe/15" />
         </div>

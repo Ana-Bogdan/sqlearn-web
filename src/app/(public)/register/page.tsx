@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { RegisterIllustration } from "@/components/illustrations";
 import { TiltScene } from "@/components/tilt-scene";
+import { STRINGS } from "@/lib/constants";
 
 export default function RegisterPage() {
   return (
@@ -9,12 +10,12 @@ export default function RegisterPage() {
       {/* Brand link — top-right corner */}
       <Link
         href="/"
-        aria-label="SQLearn"
+        aria-label={STRINGS.BRAND.NAME}
         className="absolute right-6 top-6 z-10 lg:right-10 lg:top-8"
       >
         <Image
           src="/sqlearn-logo.svg"
-          alt="SQLearn"
+          alt={STRINGS.BRAND.NAME}
           width={1427}
           height={516}
           priority
@@ -36,7 +37,7 @@ export default function RegisterPage() {
             </div>
           </div>
           <p className="animate-fade-up mt-5 text-center text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-taupe/50" style={{ animationDelay: "350ms" }}>
-            Schemas · Relations · Results
+            {STRINGS.REGISTER.CAPTION}
           </p>
         </TiltScene>
       </div>
@@ -48,13 +49,13 @@ export default function RegisterPage() {
             className="animate-fade-up text-[2.125rem] font-bold leading-[1.1] tracking-[-0.025em] text-taupe"
             style={{ animationDelay: "80ms" }}
           >
-            Create your account
+            {STRINGS.REGISTER.HEADING}
           </h1>
           <p
             className="animate-fade-up mt-3 text-[0.9375rem] leading-relaxed text-muted-foreground"
             style={{ animationDelay: "150ms" }}
           >
-            Start your SQL journey in minutes.
+            {STRINGS.REGISTER.SUBHEADING}
           </p>
 
           {/* Registration form will be added in Milestone 4 */}
@@ -76,12 +77,12 @@ export default function RegisterPage() {
             className="animate-fade-up mt-8 text-sm text-muted-foreground"
             style={{ animationDelay: "300ms" }}
           >
-            Already have an account?{" "}
+            {STRINGS.REGISTER.FOOTER_PROMPT}{" "}
             <Link
               href="/login"
               className="font-semibold text-dusk underline-offset-4 transition-colors hover:underline"
             >
-              Log in
+              {STRINGS.REGISTER.FOOTER_LINK}
             </Link>
           </p>
         </div>

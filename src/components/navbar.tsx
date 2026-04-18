@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { STRINGS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -13,12 +14,12 @@ export function Navbar() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6 lg:px-8">
         <Link
           href="/"
-          aria-label="SQLearn"
+          aria-label={STRINGS.BRAND.NAME}
           className="inline-flex items-center"
         >
           <Image
             src="/sqlearn-logo.svg"
-            alt="SQLearn"
+            alt={STRINGS.BRAND.NAME}
             width={1427}
             height={516}
             priority
@@ -36,13 +37,13 @@ export function Navbar() {
                 : "text-primary-foreground/80 hover:bg-white/10 hover:text-primary-foreground"
             )}
           >
-            Log in
+            {STRINGS.NAV.LOG_IN}
           </Link>
           <Link
             href="/register"
             className="rounded-md bg-light-mauve/90 px-4 py-1.5 text-sm font-semibold tracking-[-0.005em] text-white shadow-[0_1px_0_rgb(255_255_255_/_0.25)_inset,0_2px_8px_-2px_rgb(185_153_164_/_0.5)] transition-all duration-300 ease-out hover:-translate-y-[1px] hover:bg-light-mauve"
           >
-            Register
+            {STRINGS.NAV.REGISTER}
           </Link>
         </div>
       </div>

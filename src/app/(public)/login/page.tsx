@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LoginIllustration } from "@/components/illustrations";
 import { TiltScene } from "@/components/tilt-scene";
+import { STRINGS } from "@/lib/constants";
 
 export default function LoginPage() {
   return (
@@ -9,12 +10,12 @@ export default function LoginPage() {
       {/* Brand link — top-right corner */}
       <Link
         href="/"
-        aria-label="SQLearn"
+        aria-label={STRINGS.BRAND.NAME}
         className="absolute right-6 top-6 z-10 lg:right-10 lg:top-8"
       >
         <Image
           src="/sqlearn-logo.svg"
-          alt="SQLearn"
+          alt={STRINGS.BRAND.NAME}
           width={1427}
           height={516}
           priority
@@ -40,7 +41,7 @@ export default function LoginPage() {
           </div>
           {/* Caption under frame */}
           <p className="animate-fade-up mt-5 text-center text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-taupe/50" style={{ animationDelay: "350ms" }}>
-            Tables · Joins · Aggregations
+            {STRINGS.LOGIN.CAPTION}
           </p>
         </TiltScene>
       </div>
@@ -52,13 +53,13 @@ export default function LoginPage() {
             className="animate-fade-up text-[2.125rem] font-bold leading-[1.1] tracking-[-0.025em] text-taupe"
             style={{ animationDelay: "80ms" }}
           >
-            Welcome back
+            {STRINGS.LOGIN.HEADING}
           </h1>
           <p
             className="animate-fade-up mt-3 text-[0.9375rem] leading-relaxed text-muted-foreground"
             style={{ animationDelay: "150ms" }}
           >
-            Sign in to pick up where you left off.
+            {STRINGS.LOGIN.SUBHEADING}
           </p>
 
           {/* Auth form will be added in Milestone 4 */}
@@ -75,12 +76,12 @@ export default function LoginPage() {
             className="animate-fade-up mt-8 text-sm text-muted-foreground"
             style={{ animationDelay: "300ms" }}
           >
-            Don&apos;t have an account?{" "}
+            {STRINGS.LOGIN.FOOTER_PROMPT}{" "}
             <Link
               href="/register"
               className="font-semibold text-dusk underline-offset-4 transition-colors hover:underline"
             >
-              Register
+              {STRINGS.LOGIN.FOOTER_LINK}
             </Link>
           </p>
         </div>

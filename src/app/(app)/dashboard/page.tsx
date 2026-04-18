@@ -1,12 +1,14 @@
+import { STRINGS } from "@/lib/constants";
+
 export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
       <div className="animate-fade-up" style={{ animationDelay: "0ms" }}>
         <h1 className="text-3xl font-bold tracking-[-0.02em] text-taupe">
-          Dashboard
+          {STRINGS.DASHBOARD.HEADING}
         </h1>
         <p className="mt-1.5 text-[0.9375rem] text-muted-foreground">
-          Your learning progress at a glance.
+          {STRINGS.DASHBOARD.SUBHEADING}
         </p>
       </div>
 

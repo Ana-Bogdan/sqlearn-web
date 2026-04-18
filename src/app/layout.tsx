@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Albert_Sans, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { STRINGS } from "@/lib/constants";
 import "./globals.css";
 
 const albertSans = Albert_Sans({
@@ -34,8 +35,8 @@ const elagern = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "SQLearn",
-  description: "A gamified SQL e-learning platform",
+  title: STRINGS.META.TITLE,
+  description: STRINGS.META.DESCRIPTION,
 };
 
 export default function RootLayout({
