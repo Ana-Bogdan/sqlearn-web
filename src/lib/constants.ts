@@ -158,6 +158,84 @@ export const STRINGS = {
     COMPLETE: "Done",
   },
 
+  EXERCISE: {
+    TABS: {
+      THEORY: "Theory",
+      EXERCISE_SHORT: "Ex",
+    },
+    OVERVIEW_HEADING: "Practice",
+    OVERVIEW_SUBHEADING:
+      "Pick an exercise to start writing SQL. Your progress saves automatically.",
+    LOAD_ERROR: "We couldn't load this exercise. Refresh to try again.",
+    BRIEF: {
+      EXERCISE_EYEBROW: "Exercise",
+      QUIZ_EYEBROW: "Chapter quiz",
+      ALREADY_SOLVED: "Already solved",
+      EMPTY_INSTRUCTIONS:
+        "This exercise doesn't have written instructions yet.",
+    },
+    EDITOR: {
+      TAB_LABEL: "query.sql",
+      RUN: "Run query",
+      RUN_PENDING: "Running…",
+      RUN_SHORTCUT_NOTE: "to run",
+      RESET: "Reset",
+      PLACEHOLDER:
+        "-- Start typing your SQL here. Press ⌘+Enter to run.",
+      EMPTY_SQL: "Write a query first — the editor is empty.",
+      SUBMIT_ERROR:
+        "We couldn't submit your query. Check your connection and try again.",
+    },
+    RESULTS: {
+      IDLE_BODY:
+        "Run your query to see results, row-by-row, with a side-by-side diff when something is off.",
+      IDLE_HINT: "Ready when you are",
+      RUNNING: "Executing your query…",
+      YOUR_RESULT: "Your result",
+      EXPECTED_RESULT: "Expected result",
+      EMPTY: "The query returned no columns.",
+      NO_ROWS: "No rows returned.",
+      TABLE_META: (rows: number, cols: number) =>
+        `${rows} ${rows === 1 ? "row" : "rows"} · ${cols} ${cols === 1 ? "column" : "columns"}`,
+      TRUNCATED: (shown: number, total: number) =>
+        `Showing the first ${shown} of ${total} rows.`,
+    },
+    BANNER: {
+      CORRECT_TITLE: "Correct",
+      CORRECT_BODY: "Your query returned the expected result.",
+      INCORRECT_GENERIC: "Close, but not quite",
+      INCORRECT_COLUMNS: "Columns don't match",
+      INCORRECT_ROW_COUNT: "Row count is off",
+      INCORRECT_ROWS: "Rows don't match",
+      SYNTAX_TITLE: "Syntax error",
+      EXECUTION_TITLE: "Query couldn't run",
+      TIMEOUT_TITLE: "Query took too long",
+      FORBIDDEN_TITLE: "Query not allowed here",
+    },
+    HINTS: {
+      HEADING: "Hints",
+      COUNTER: (revealed: number, total: number) => `${revealed} / ${total}`,
+      EMPTY_BODY:
+        "Stuck? Reveal the first hint for a gentle nudge in the right direction.",
+      REVEAL_FIRST: "Reveal first hint",
+      REVEAL_NEXT: "Reveal next hint",
+      ALL_REVEALED: "You've revealed every hint for this exercise.",
+    },
+    XP: {
+      LABEL: "XP",
+      FIRST_ATTEMPT: "First try",
+    },
+    COMPLETE: {
+      EYEBROW: "Lesson complete",
+      HEADING: "You finished every exercise",
+      BODY: (title: string, count: number) =>
+        `You completed all ${count} ${count === 1 ? "exercise" : "exercises"} in ${title}. Take a breath, then keep going.`,
+      NEXT_LESSON: "Next lesson",
+      BACK_TO_CURRICULUM: "Back to curriculum",
+      STAY_HERE: "Stay on this lesson",
+    },
+  },
+
   FORM: {
     SHOW_PASSWORD: "Show password",
     HIDE_PASSWORD: "Hide password",
