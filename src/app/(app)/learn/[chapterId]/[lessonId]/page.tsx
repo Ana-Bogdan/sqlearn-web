@@ -56,6 +56,11 @@ export default function LessonPage({ params }: LessonPageProps) {
     setError(null);
     setShowComplete(false);
 
+    // Next 16's <Link> preserves scroll when any part of the Page element is
+    // still in the viewport — which it always is when swapping lessonId on the
+    // same page.tsx — so we reset manually on lesson change.
+    window.scrollTo({ top: 0, behavior: "instant" });
+
     (async () => {
       try {
         const [chapterData, lessonData] = await Promise.all([
@@ -95,6 +100,10 @@ export default function LessonPage({ params }: LessonPageProps) {
     // Only react to active tab changes — don't loop off searchParams edits.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, chapterId, lessonId, lesson]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [activeTab]);
 
   // If user lands with ?ex=123 but that id isn't in this lesson, fall back to theory.
   useEffect(() => {
