@@ -142,8 +142,8 @@ export const STRINGS = {
     NO_EXERCISES: "This lesson has no exercises yet.",
     LESSON_PROGRESS: (done: number, total: number) =>
       `${done} / ${total} exercises`,
-    PREV_LESSON: "Previous",
-    NEXT_LESSON: "Next",
+    PREV_LESSON: "Previous Lesson",
+    NEXT_LESSON: "Next Lesson",
     LOADING: "Loading lesson…",
     LOAD_ERROR: "We couldn't load this lesson. Refresh to try again.",
     THEORY_EMPTY: "No theory content has been written for this lesson yet.",

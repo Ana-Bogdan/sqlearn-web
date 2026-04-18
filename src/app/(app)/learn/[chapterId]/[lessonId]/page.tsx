@@ -229,14 +229,21 @@ export default function LessonPage({ params }: LessonPageProps) {
             onPickExercise={(id) => setActiveTab(`ex-${id}`)}
           />
         ) : activeExerciseId ? (
-          <ExerciseWorkspace
-            key={activeExerciseId}
-            exerciseId={activeExerciseId}
-            onStatusChange={handleStatusChange}
-            onCorrect={handleCorrect}
-            onLessonLikelyComplete={handleLessonLikelyComplete}
-            lessonExerciseOrder={lessonExerciseOrder}
-          />
+          <>
+            <ExerciseWorkspace
+              key={activeExerciseId}
+              exerciseId={activeExerciseId}
+              onStatusChange={handleStatusChange}
+              onCorrect={handleCorrect}
+              onLessonLikelyComplete={handleLessonLikelyComplete}
+              lessonExerciseOrder={lessonExerciseOrder}
+            />
+            <ExerciseCta
+              exercises={exercises}
+              currentExerciseId={activeExerciseId}
+              onPickExercise={(id) => setActiveTab(`ex-${id}`)}
+            />
+          </>
         ) : null}
       </div>
 
@@ -347,9 +354,11 @@ function TheoryView({
   exercises: ExerciseSummary[];
   onPickExercise: (id: number) => void;
 }) {
-  const firstIncomplete = exercises.find(
+  const firstIncompleteIndex = exercises.findIndex(
     (ex) => ex.user_status !== "completed",
   );
+  const firstIncomplete =
+    firstIncompleteIndex >= 0 ? exercises[firstIncompleteIndex] : undefined;
   return (
     <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14 xl:grid-cols-[minmax(0,1fr)_360px]">
       <article className="animate-fade-up min-w-0">
@@ -371,9 +380,14 @@ function TheoryView({
             className="theory-cta"
           >
             <span className="theory-cta__label">
-              {exercises.some((ex) => ex.user_status === "completed")
-                ? "Continue with"
-                : "Start with"}
+              <span className="theory-cta__label-verb">
+                {exercises.some((ex) => ex.user_status === "completed")
+                  ? "Continue with"
+                  : "Start with"}
+              </span>
+              <span className="theory-cta__label-ord">
+                {toOrdinal(firstIncompleteIndex + 1)} exercise
+              </span>
             </span>
             <span className="theory-cta__title">{firstIncomplete.title}</span>
             <span className="theory-cta__arrow" aria-hidden="true">
@@ -397,6 +411,39 @@ function TheoryView({
         />
       </aside>
     </div>
+  );
+}
+
+function ExerciseCta({
+  exercises,
+  currentExerciseId,
+  onPickExercise,
+}: {
+  exercises: ExerciseSummary[];
+  currentExerciseId: number;
+  onPickExercise: (id: number) => void;
+}) {
+  const currentIdx = exercises.findIndex((ex) => ex.id === currentExerciseId);
+  if (currentIdx < 0 || currentIdx >= exercises.length - 1) return null;
+  const nextIdx = currentIdx + 1;
+  const next = exercises[nextIdx];
+  return (
+    <button
+      type="button"
+      onClick={() => onPickExercise(next.id)}
+      className="theory-cta"
+    >
+      <span className="theory-cta__label">
+        <span className="theory-cta__label-verb">Continue with</span>
+        <span className="theory-cta__label-ord">
+          {toOrdinal(nextIdx + 1)} exercise
+        </span>
+      </span>
+      <span className="theory-cta__title">{next.title}</span>
+      <span className="theory-cta__arrow" aria-hidden="true">
+        →
+      </span>
+    </button>
   );
 }
 
@@ -578,6 +625,12 @@ function ArrowLeft() {
       />
     </svg>
   );
+}
+
+function toOrdinal(n: number): string {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return `${n}${s[(v - 20) % 10] ?? s[v] ?? s[0]}`;
 }
 
 function LessonSkeleton() {

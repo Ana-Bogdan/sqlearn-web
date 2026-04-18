@@ -707,7 +707,7 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 0.9rem 1.25rem;
+  gap: 0.9rem 1rem;
   width: 100%;
   max-width: 44rem;
   padding: 1rem 1.25rem;
@@ -730,20 +730,35 @@
 }
 
 .theory-cta__label {
+  grid-column: 1;
   grid-row: 1 / span 2;
   align-self: start;
-  display: inline-block;
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #6B5D50;
-  padding: 0.3rem 0.55rem;
+  padding: 0.35rem 0.55rem;
   border-radius: 0.4rem;
   background: rgba(185, 153, 164, 0.22);
 }
 
+.theory-cta__label-verb,
+.theory-cta__label-ord {
+  display: block;
+  line-height: 1.2;
+}
+
 .theory-cta__title {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: end;
   font-size: 1.0625rem;
   font-weight: 700;
   color: #3E5570;
@@ -751,7 +766,9 @@
 }
 
 .theory-cta__arrow {
+  grid-column: 3;
   grid-row: 1 / span 2;
+  justify-self: end;
   font-size: 1.25rem;
   color: #3E5570;
   transition: transform 320ms var(--ease-out-expo);
