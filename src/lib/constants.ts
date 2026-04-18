@@ -18,7 +18,7 @@ export const STRINGS = {
     CTA_PRIMARY: "Get started",
     CTA_SECONDARY: "Log in",
     FOOTER_NOTE:
-      "Built for university students learning databases for the first time",
+      "Built for curious minds learning SQL — no prior experience required",
   },
   LOGIN: {
     HEADING: "Welcome back",
