@@ -11,19 +11,19 @@ export function Navbar() {
 
   return (
     <nav className="relative z-[3] border-b border-dusk/20 bg-dusk shadow-[0_1px_0_rgb(255_255_255_/_0.06)_inset]">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6 lg:px-8">
+      <div className="flex h-16 items-center justify-between pl-4 pr-6 lg:pr-8">
         <Link
           href="/"
           aria-label={STRINGS.BRAND.NAME}
           className="inline-flex items-center"
         >
           <Image
-            src="/sqlearn-logo.svg"
+            src="/sqlearn-logo-light.png"
             alt={STRINGS.BRAND.NAME}
             width={1427}
             height={516}
             priority
-            className="h-7 w-auto"
+            className="h-15 w-auto"
           />
         </Link>
 
