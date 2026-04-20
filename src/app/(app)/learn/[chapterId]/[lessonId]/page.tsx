@@ -3,10 +3,15 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { use, useCallback, useEffect, useMemo, useState } from "react";
-import { ExerciseWorkspace } from "@/components/learn/exercise-workspace";
+import {
+  ExerciseWorkspace,
+  type CorrectSubmissionInfo,
+} from "@/components/learn/exercise-workspace";
 import { LessonCompleteModal } from "@/components/learn/lesson-complete-modal";
+import { LevelUpOverlay } from "@/components/learn/level-up-overlay";
 import { XpToast } from "@/components/learn/xp-toast";
 import { STRINGS } from "@/lib/constants";
+import type { Badge } from "@/lib/gamification";
 import {
   fetchChapter,
   fetchLesson,
@@ -46,6 +51,17 @@ export default function LessonPage({ params }: LessonPageProps) {
     id: number;
     xp: number;
     firstAttempt: boolean;
+    streakBonus: boolean;
+  } | null>(null);
+  const [levelUp, setLevelUp] = useState<{
+    id: number;
+    level: number;
+    title: string;
+  } | null>(null);
+  const [completion, setCompletion] = useState<{
+    xp: number;
+    badges: Badge[];
+    variant: "lesson" | "quiz";
   } | null>(null);
   const [showComplete, setShowComplete] = useState(false);
 
@@ -136,33 +152,69 @@ export default function LessonPage({ params }: LessonPageProps) {
     [],
   );
 
-  const handleCorrect = useCallback(
-    (info: { xp: number; firstAttempt: boolean }) => {
+  const handleCorrect = useCallback((info: CorrectSubmissionInfo) => {
+    const gam = info.gamification;
+    const xp = gam?.xp_earned ?? 0;
+    // "First try" flag is visible when the learner solved on submission #1,
+    // derivable from the xp_breakdown containing the first-attempt line.
+    const firstAttempt = Boolean(
+      gam?.xp_breakdown.some((line) => line.label.includes("first attempt")),
+    );
+    const streakBonus = Boolean(
+      gam?.xp_breakdown.some((line) => line.label.includes("streak")),
+    );
+
+    if (xp > 0) {
       setToast({
         id: Date.now(),
-        xp: info.xp,
-        firstAttempt: info.firstAttempt,
+        xp,
+        firstAttempt,
+        streakBonus,
+      });
+    }
+
+    if (gam?.level_up) {
+      // Slight delay so the XP toast animates in before the level-up overlay
+      // takes the stage.
+      window.setTimeout(() => {
+        setLevelUp({
+          id: Date.now(),
+          level: gam.level,
+          title: gam.level_title,
+        });
+      }, 600);
+    }
+  }, []);
+
+  const handleLessonLikelyComplete = useCallback(
+    (info: CorrectSubmissionInfo) => {
+      // Defer one microtask so the exercise list status update from
+      // `handleStatusChange` is already in state before we decide.
+      queueMicrotask(() => {
+        setExercises((prev) => {
+          const allDone =
+            prev.length > 0 &&
+            prev.every((ex) => ex.user_status === "completed");
+          if (allDone) {
+            setCompletion({
+              xp: info.gamification?.xp_earned ?? 0,
+              badges: info.gamification?.badges_earned ?? [],
+              variant: info.isChapterQuiz ? "quiz" : "lesson",
+            });
+            // Slight delay so the XP toast has a moment to appear first.
+            // If a level-up overlay is showing, extend the delay so it lands
+            // after the user dismisses the level-up card.
+            window.setTimeout(
+              () => setShowComplete(true),
+              info.gamification?.level_up ? 1400 : 900,
+            );
+          }
+          return prev;
+        });
       });
     },
     [],
   );
-
-  const handleLessonLikelyComplete = useCallback(() => {
-    // Defer one microtask so the exercise list status update from
-    // `handleStatusChange` is already in state before we decide.
-    queueMicrotask(() => {
-      setExercises((prev) => {
-        const allDone =
-          prev.length > 0 &&
-          prev.every((ex) => ex.user_status === "completed");
-        if (allDone) {
-          // Slight delay so the XP toast has a moment to appear first.
-          window.setTimeout(() => setShowComplete(true), 900);
-        }
-        return prev;
-      });
-    });
-  }, []);
 
   const handleGoToNextLesson = useCallback(() => {
     if (!navigation.next) return;
@@ -267,7 +319,17 @@ export default function LessonPage({ params }: LessonPageProps) {
           key={toast.id}
           xp={toast.xp}
           firstAttempt={toast.firstAttempt}
+          streakBonus={toast.streakBonus}
           onDone={() => setToast(null)}
+        />
+      ) : null}
+
+      {levelUp ? (
+        <LevelUpOverlay
+          key={levelUp.id}
+          level={levelUp.level}
+          title={levelUp.title}
+          onDismiss={() => setLevelUp(null)}
         />
       ) : null}
 
@@ -275,6 +337,9 @@ export default function LessonPage({ params }: LessonPageProps) {
         <LessonCompleteModal
           lessonTitle={lesson.title}
           exerciseCount={totalExercises}
+          xpEarned={completion?.xp ?? null}
+          badgesEarned={completion?.badges ?? []}
+          variant={completion?.variant ?? "lesson"}
           onClose={() => setShowComplete(false)}
           onNextLesson={navigation.next ? handleGoToNextLesson : null}
           onBackToCurriculum={handleBackToCurriculum}

@@ -11,18 +11,16 @@ import {
   type ExerciseHint,
   type SubmissionOutcome,
 } from "@/lib/exercises";
+import type { GamificationResult } from "@/lib/gamification";
 import { HintsPanel } from "./hints-panel";
 import { ResultsPanel } from "./results-panel";
 import { SqlEditor } from "./sql-editor";
 
-const PLACEHOLDER_XP_BY_DIFFICULTY: Record<
-  ExerciseSummary["difficulty"],
-  number
-> = {
-  easy: 20,
-  medium: 40,
-  hard: 60,
-};
+export interface CorrectSubmissionInfo {
+  exerciseId: number;
+  isChapterQuiz: boolean;
+  gamification: GamificationResult | null;
+}
 
 interface ExerciseWorkspaceProps {
   exerciseId: number;
@@ -30,9 +28,9 @@ interface ExerciseWorkspaceProps {
   onStatusChange: (exerciseId: number, status: ExerciseSummary["user_status"]) => void;
   // Fires when the user completes the last remaining exercise so the lesson
   // page can celebrate and offer a "Next lesson" action.
-  onLessonLikelyComplete: (exerciseId: number) => void;
+  onLessonLikelyComplete: (info: CorrectSubmissionInfo) => void;
   // Fires on any successful correct submission so the parent can raise a toast.
-  onCorrect: (info: { xp: number; firstAttempt: boolean }) => void;
+  onCorrect: (info: CorrectSubmissionInfo) => void;
   // Used to adapt the "next exercise" CTA when completing mid-lesson.
   lessonExerciseOrder: number[];
 }
@@ -110,12 +108,13 @@ export function ExerciseWorkspace({
       onStatusRef.current(detail.id, outcome.user_status);
 
       if (outcome.status === "correct") {
-        const xp = PLACEHOLDER_XP_BY_DIFFICULTY[detail.difficulty] ?? 20;
-        onCorrectRef.current({
-          xp,
-          firstAttempt: outcome.was_first_attempt,
-        });
-        onLessonLikelyRef.current(detail.id);
+        const info: CorrectSubmissionInfo = {
+          exerciseId: detail.id,
+          isChapterQuiz: detail.is_chapter_quiz,
+          gamification: outcome.gamification,
+        };
+        onCorrectRef.current(info);
+        onLessonLikelyRef.current(info);
       }
     } catch {
       setSubmission({ kind: "idle" });

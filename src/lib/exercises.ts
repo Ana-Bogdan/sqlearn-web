@@ -1,5 +1,6 @@
 import { api } from "./api";
 import type { Difficulty, ExerciseStatus } from "./curriculum";
+import type { GamificationResult } from "./gamification";
 
 export interface ExerciseDetail {
   id: number;
@@ -49,6 +50,7 @@ export interface SubmissionOutcome {
   user_status: ExerciseStatus;
   was_first_attempt: boolean;
   submission_count: number;
+  gamification: GamificationResult | null;
 }
 
 export function fetchExercise(id: number | string) {

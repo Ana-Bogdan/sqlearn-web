@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { BadgeIcon } from "@/components/badge-icon";
 import { STRINGS } from "@/lib/constants";
+import type { Badge } from "@/lib/gamification";
 
 interface LessonCompleteModalProps {
   lessonTitle: string;
   exerciseCount: number;
+  xpEarned?: number | null;
+  badgesEarned?: Badge[];
+  variant?: "lesson" | "quiz";
   onClose: () => void;
   onNextLesson: (() => void) | null;
   onBackToCurriculum: () => void;
@@ -14,6 +19,9 @@ interface LessonCompleteModalProps {
 export function LessonCompleteModal({
   lessonTitle,
   exerciseCount,
+  xpEarned,
+  badgesEarned,
+  variant = "lesson",
   onClose,
   onNextLesson,
   onBackToCurriculum,
@@ -25,7 +33,6 @@ export function LessonCompleteModal({
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
-    // Focus the primary action for keyboard users.
     const t = window.setTimeout(() => {
       const primary = dialogRef.current?.querySelector<HTMLButtonElement>(
         "button[data-primary='true']",
@@ -38,6 +45,17 @@ export function LessonCompleteModal({
     };
   }, [onClose]);
 
+  const isQuiz = variant === "quiz";
+  const eyebrow = isQuiz
+    ? STRINGS.LESSON_COMPLETE.QUIZ_EYEBROW
+    : STRINGS.EXERCISE.COMPLETE.EYEBROW;
+  const heading = isQuiz
+    ? STRINGS.LESSON_COMPLETE.QUIZ_HEADING
+    : STRINGS.EXERCISE.COMPLETE.HEADING;
+  const body = isQuiz
+    ? STRINGS.LESSON_COMPLETE.QUIZ_BODY(lessonTitle)
+    : STRINGS.EXERCISE.COMPLETE.BODY(lessonTitle, exerciseCount);
+
   return (
     <div
       className="lesson-complete-backdrop"
@@ -46,25 +64,57 @@ export function LessonCompleteModal({
     >
       <div
         ref={dialogRef}
-        className="lesson-complete-dialog"
+        className={`lesson-complete-dialog ${isQuiz ? "lesson-complete-dialog--quiz" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="lesson-complete-heading"
         onClick={(e) => e.stopPropagation()}
       >
         <Confetti />
-        <p className="lesson-complete-dialog__eyebrow">
-          {STRINGS.EXERCISE.COMPLETE.EYEBROW}
-        </p>
+        <p className="lesson-complete-dialog__eyebrow">{eyebrow}</p>
         <h2
           id="lesson-complete-heading"
           className="lesson-complete-dialog__heading"
         >
-          {STRINGS.EXERCISE.COMPLETE.HEADING}
+          {heading}
         </h2>
-        <p className="lesson-complete-dialog__body">
-          {STRINGS.EXERCISE.COMPLETE.BODY(lessonTitle, exerciseCount)}
-        </p>
+        <p className="lesson-complete-dialog__body">{body}</p>
+
+        {typeof xpEarned === "number" && xpEarned > 0 ? (
+          <div className="lesson-complete-dialog__xp">
+            <span className="lesson-complete-dialog__xp-amount">
+              +{xpEarned}
+            </span>
+            <span className="lesson-complete-dialog__xp-label">
+              {STRINGS.LESSON_COMPLETE.XP_EARNED}
+            </span>
+          </div>
+        ) : null}
+
+        {badgesEarned && badgesEarned.length > 0 ? (
+          <div className="lesson-complete-dialog__badges">
+            <p className="lesson-complete-dialog__badges-label">
+              {STRINGS.LESSON_COMPLETE.BADGES_EARNED_LABEL}
+            </p>
+            <div className="lesson-complete-dialog__badges-list">
+              {badgesEarned.map((badge, idx) => (
+                <span
+                  key={badge.id}
+                  className="lesson-complete-dialog__badge"
+                  style={{ animationDelay: `${idx * 100}ms` }}
+                >
+                  <span
+                    className="lesson-complete-dialog__badge-icon"
+                    aria-hidden="true"
+                  >
+                    <BadgeIcon name={badge.icon} size={16} />
+                  </span>
+                  {badge.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         <div className="lesson-complete-dialog__actions">
           {onNextLesson ? (
@@ -101,8 +151,6 @@ export function LessonCompleteModal({
   );
 }
 
-// Small SVG confetti — animated via CSS `pulse-soft` / `float-*` utilities
-// already defined in globals.css, keeping the material aesthetic.
 function Confetti() {
   const pieces = [
     { cls: "float-a", x: 12, y: 14, fill: "#B999A4", w: 10, h: 4, r: -14 },

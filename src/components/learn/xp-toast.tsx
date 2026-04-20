@@ -6,15 +6,21 @@ import { STRINGS } from "@/lib/constants";
 interface XpToastProps {
   xp: number;
   firstAttempt: boolean;
+  streakBonus?: boolean;
   onDone: () => void;
 }
 
-export function XpToast({ xp, firstAttempt, onDone }: XpToastProps) {
+export function XpToast({
+  xp,
+  firstAttempt,
+  streakBonus,
+  onDone,
+}: XpToastProps) {
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    const leaveTimer = window.setTimeout(() => setLeaving(true), 2200);
-    const removeTimer = window.setTimeout(() => onDone(), 2900);
+    const leaveTimer = window.setTimeout(() => setLeaving(true), 2400);
+    const removeTimer = window.setTimeout(() => onDone(), 3100);
     return () => {
       window.clearTimeout(leaveTimer);
       window.clearTimeout(removeTimer);
@@ -36,10 +42,16 @@ export function XpToast({ xp, firstAttempt, onDone }: XpToastProps) {
         </svg>
       </span>
       <span className="xp-toast__amount">+{xp}</span>
-      <span className="xp-toast__label">{STRINGS.EXERCISE.XP.LABEL}</span>
-      {firstAttempt ? (
-        <span className="xp-toast__flag">
-          {STRINGS.EXERCISE.XP.FIRST_ATTEMPT}
+      <span className="xp-toast__label">{STRINGS.XP.LABEL}</span>
+
+      {firstAttempt || streakBonus ? (
+        <span className="xp-toast__breakdown" aria-hidden="true">
+          {firstAttempt ? (
+            <span className="xp-toast__flag">{STRINGS.XP.FIRST_ATTEMPT}</span>
+          ) : null}
+          {streakBonus ? (
+            <span className="xp-toast__flag">{STRINGS.XP.STREAK}</span>
+          ) : null}
         </span>
       ) : null}
     </div>

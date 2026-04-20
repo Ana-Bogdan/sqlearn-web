@@ -108,8 +108,120 @@ export const STRINGS = {
     MISSING_SYMBOL: "a symbol",
   },
   DASHBOARD: {
+    EYEBROW: "Your SQLearn",
     HEADING: "Dashboard",
     SUBHEADING: "Your learning progress at a glance.",
+    GREETING: (name: string) => `Welcome back, ${name}.`,
+    GREETING_GUEST: "Welcome back.",
+    SUB: "Pick up where you left off, or aim for your next level.",
+    LEVEL_CARD: {
+      EYEBROW: "Level",
+      XP_LABEL: "XP",
+      TO_NEXT: (n: number) => `${n.toLocaleString()} XP to next level`,
+      MAX_LEVEL: "You've reached the top level. Masterful.",
+    },
+    STREAK_CARD: {
+      EYEBROW: "Streak",
+      DAYS: (n: number) => `${n} ${n === 1 ? "day" : "days"}`,
+      BEST: (n: number) => `Best: ${n} ${n === 1 ? "day" : "days"}`,
+      TAGLINE: "Show up tomorrow to keep the flame.",
+      NONE_TAGLINE: "Complete an exercise to start a streak.",
+    },
+    BADGES_CARD: {
+      EYEBROW: "Recent badges",
+      EMPTY: "Your first badge is a query away.",
+      VIEW_ALL: "View all badges",
+    },
+    PROGRESS_CARD: {
+      EYEBROW: "Overall progress",
+      CHAPTERS: (done: number, total: number) =>
+        `${done} / ${total} chapters`,
+      LESSONS: (done: number, total: number) =>
+        `${done} / ${total} lessons`,
+      EXERCISES: (done: number, total: number) =>
+        `${done} / ${total} exercises`,
+      COLLECTION: (done: number, total: number) =>
+        `${done} / ${total} badges`,
+    },
+    CONTINUE: {
+      EYEBROW: "Continue learning",
+      FALLBACK_EYEBROW: "Start learning",
+      CTA: "Open curriculum",
+      RESUME_CTA: "Resume",
+      BEGIN_CTA: "Begin",
+      COMPLETE_STATE: "You've cleared every published exercise.",
+      COMPLETE_CTA: "Review curriculum",
+    },
+    LOADING: "Loading your dashboard…",
+    LOAD_ERROR: "We couldn't load your dashboard. Refresh to try again.",
+    CTA_LEADERBOARD: "See the leaderboard",
+    CTA_PROFILE: "View your profile",
+  },
+  LEADERBOARD: {
+    EYEBROW: "Standings",
+    HEADING: "Leaderboard",
+    SUBHEADING:
+      "Top learners by XP. Keep solving exercises to climb the ranks.",
+    HEADERS: {
+      RANK: "Rank",
+      LEARNER: "Learner",
+      LEVEL: "Level",
+      XP: "XP",
+      BADGES: "Badges",
+    },
+    YOU: "You",
+    PAGER: {
+      PREV: "Previous",
+      NEXT: "Next",
+      PAGE: (current: number, total: number) => `Page ${current} of ${total}`,
+    },
+    EMPTY: "The leaderboard is empty. Be the first to earn XP.",
+    LOAD_ERROR:
+      "We couldn't load the leaderboard. Refresh to try again.",
+    LOADING: "Loading rankings…",
+    CURRENT_USER_ROW: "Your current standing",
+  },
+  PROFILE: {
+    LOADING: "Loading profile…",
+    LOAD_ERROR: "We couldn't load this profile. Refresh to try again.",
+    LEVEL: "Level",
+    STATS: {
+      XP: "Total XP",
+      STREAK: "Current streak",
+      LONGEST_STREAK: "Longest streak",
+      EXERCISES: "Exercises solved",
+      BADGES: "Badges earned",
+    },
+    DAYS: (n: number) => `${n} ${n === 1 ? "day" : "days"}`,
+    BADGES_HEADING: "Badge collection",
+    BADGES_EMPTY:
+      "No badges yet. Every badge tells a story — complete exercises to start collecting.",
+    BADGES_COUNT: (done: number, total: number) =>
+      `${done} of ${total} earned`,
+    CATEGORIES: {
+      milestone: "Milestones",
+      skill: "Skill",
+      streak: "Streak",
+      fun: "Fun",
+    },
+    NOT_EARNED: "Not earned yet",
+  },
+  XP: {
+    LABEL: "XP",
+    FIRST_ATTEMPT: "First try",
+    STREAK: "Streak",
+    LEVEL_UP_EYEBROW: "Level up",
+    LEVEL_UP_HEADING: (level: number) => `You reached level ${level}`,
+    LEVEL_UP_BODY: (title: string) => `You're now a ${title}.`,
+  },
+  LESSON_COMPLETE: {
+    LESSON_EYEBROW: "Lesson complete",
+    QUIZ_EYEBROW: "Chapter mastered",
+    QUIZ_HEADING: "Chapter mastered",
+    QUIZ_BODY: (title: string) =>
+      `You've conquered every exercise in ${title}. The next chapter is open.`,
+    XP_EARNED: "XP earned",
+    BADGES_EARNED_LABEL: "New badges",
   },
   LEARN: {
     EYEBROW: "Curriculum",
