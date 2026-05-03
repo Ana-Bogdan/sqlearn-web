@@ -3765,12 +3765,10 @@
   background: rgba(255, 253, 248, 0.7);
 }
 
-/* FAB-style mentor trigger */
+/* Inline mentor trigger — sits in the editor actions row, right-aligned */
 .mentor-trigger {
-  position: fixed;
-  right: clamp(1rem, 3vw, 2rem);
-  bottom: clamp(1rem, 3vw, 1.75rem);
-  z-index: 55;
+  position: relative;
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
@@ -3792,18 +3790,19 @@
 }
 .mentor-trigger:hover {
   transform: translateY(-2px);
+  background: linear-gradient(180deg, #FFF8EB 0%, #F0D8C2 100%);
+  border-color: rgba(185, 153, 164, 0.5);
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.6) inset,
     0 22px 40px -16px rgba(62, 85, 112, 0.55),
     0 10px 18px -10px rgba(62, 85, 112, 0.22);
 }
+.mentor-trigger:hover .mentor-trigger__face {
+  background: linear-gradient(180deg, #F2D6CB 0%, #DCB1B6 100%);
+}
 .mentor-trigger:focus-visible {
   outline: 2px solid rgba(62, 85, 112, 0.6);
   outline-offset: 3px;
-}
-.mentor-trigger[data-active="true"] {
-  background: #3E5570;
-  color: #F5F1E5;
 }
 
 .mentor-trigger__pulse {
@@ -3835,10 +3834,6 @@
   background: linear-gradient(180deg, #F6E6D6 0%, #E8C7B6 100%);
   box-shadow: 0 2px 4px rgba(70, 60, 51, 0.12);
 }
-.mentor-trigger[data-active="true"] .mentor-trigger__face {
-  color: #F5F1E5;
-  background: linear-gradient(180deg, #4D6680 0%, #344962 100%);
-}
 
 .mentor-trigger__copy {
   position: relative;
@@ -3859,9 +3854,6 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgba(70, 60, 51, 0.6);
-}
-.mentor-trigger[data-active="true"] .mentor-trigger__sub {
-  color: rgba(245, 241, 229, 0.7);
 }
 
 /* Explain-with-AI CTA inside outcome banners */

@@ -314,6 +314,15 @@ export function ExerciseWorkspace({
               >
                 {STRINGS.EXERCISE.EDITOR.RESET}
               </button>
+              <MentorTrigger
+                exerciseId={detail.id}
+                exerciseTitle={detail.title}
+                hasError={
+                  submission.kind === "result" &&
+                  submission.outcome.status !== "correct"
+                }
+                errorEpoch={errorEpoch}
+              />
             </div>
             {submitError ? (
               <p className="editor-shell__error" role="alert">
@@ -329,15 +338,6 @@ export function ExerciseWorkspace({
         </section>
       </div>
 
-      <MentorTrigger
-        exerciseId={detail.id}
-        exerciseTitle={detail.title}
-        hasError={
-          submission.kind === "result" &&
-          submission.outcome.status !== "correct"
-        }
-        errorEpoch={errorEpoch}
-      />
       <MentorDrawer currentSql={sql} onInsertSql={handleInsertSql} />
     </div>
   );
