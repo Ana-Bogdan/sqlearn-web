@@ -13,9 +13,12 @@ interface ResultsPanelProps {
     | { kind: "idle" }
     | { kind: "running" }
     | { kind: "result"; outcome: SubmissionOutcome };
+  // When provided, shows an "Explain with AI" CTA inside non-success banners
+  // that opens the mentor drawer pre-loaded with the failure context.
+  onExplainWithAI?: () => void;
 }
 
-export function ResultsPanel({ state }: ResultsPanelProps) {
+export function ResultsPanel({ state, onExplainWithAI }: ResultsPanelProps) {
   if (state.kind === "idle") {
     return (
       <div className="results-panel results-panel--idle">
@@ -58,14 +61,20 @@ export function ResultsPanel({ state }: ResultsPanelProps) {
     );
   }
 
-  return <OutcomeView outcome={state.outcome} />;
+  return <OutcomeView outcome={state.outcome} onExplainWithAI={onExplainWithAI} />;
 }
 
-function OutcomeView({ outcome }: { outcome: SubmissionOutcome }) {
+function OutcomeView({
+  outcome,
+  onExplainWithAI,
+}: {
+  outcome: SubmissionOutcome;
+  onExplainWithAI?: () => void;
+}) {
   const hasResult = Boolean(outcome.result);
   return (
     <div className="results-panel">
-      <OutcomeBanner outcome={outcome} />
+      <OutcomeBanner outcome={outcome} onExplainWithAI={onExplainWithAI} />
       {outcome.status === "correct" && hasResult ? (
         <div className="mt-4">
           <ResultTable caption={STRINGS.EXERCISE.RESULTS.YOUR_RESULT} data={outcome.result!} tone="correct" />
@@ -95,7 +104,13 @@ function OutcomeView({ outcome }: { outcome: SubmissionOutcome }) {
   );
 }
 
-function OutcomeBanner({ outcome }: { outcome: SubmissionOutcome }) {
+function OutcomeBanner({
+  outcome,
+  onExplainWithAI,
+}: {
+  outcome: SubmissionOutcome;
+  onExplainWithAI?: () => void;
+}) {
   if (outcome.status === "correct") {
     return (
       <div className="outcome-banner" data-tone="correct" role="status">
@@ -121,6 +136,9 @@ function OutcomeBanner({ outcome }: { outcome: SubmissionOutcome }) {
             {reasonTitle(outcome.reason ?? null)}
           </p>
           <p className="outcome-banner__body">{outcome.message}</p>
+          {onExplainWithAI ? (
+            <ExplainCta onClick={onExplainWithAI} tone="incorrect" />
+          ) : null}
         </div>
       </div>
     );
@@ -137,6 +155,9 @@ function OutcomeBanner({ outcome }: { outcome: SubmissionOutcome }) {
               : STRINGS.EXERCISE.BANNER.EXECUTION_TITLE}
           </p>
           <pre className="outcome-banner__code">{outcome.message}</pre>
+          {onExplainWithAI ? (
+            <ExplainCta onClick={onExplainWithAI} tone="error" />
+          ) : null}
         </div>
       </div>
     );
@@ -151,6 +172,9 @@ function OutcomeBanner({ outcome }: { outcome: SubmissionOutcome }) {
             {STRINGS.EXERCISE.BANNER.TIMEOUT_TITLE}
           </p>
           <p className="outcome-banner__body">{outcome.message}</p>
+          {onExplainWithAI ? (
+            <ExplainCta onClick={onExplainWithAI} tone="warning" />
+          ) : null}
         </div>
       </div>
     );
@@ -165,8 +189,45 @@ function OutcomeBanner({ outcome }: { outcome: SubmissionOutcome }) {
           {STRINGS.EXERCISE.BANNER.FORBIDDEN_TITLE}
         </p>
         <p className="outcome-banner__body">{outcome.message}</p>
+        {onExplainWithAI ? (
+          <ExplainCta onClick={onExplainWithAI} tone="warning" />
+        ) : null}
       </div>
     </div>
+  );
+}
+
+function ExplainCta({
+  onClick,
+  tone,
+}: {
+  onClick: () => void;
+  tone: "incorrect" | "error" | "warning";
+}) {
+  return (
+    <button
+      type="button"
+      className="outcome-banner__explain"
+      data-tone={tone}
+      onClick={onClick}
+    >
+      <span className="outcome-banner__explain-mark" aria-hidden="true">
+        <svg viewBox="0 0 16 16" width="11" height="11">
+          <path
+            d="M8 1.5C4.4 1.5 1.5 4 1.5 7.1c0 1.8.95 3.4 2.5 4.45L3.4 13.6c-.08.36.3.62.62.42L6.2 13c.6.13 1.2.2 1.8.2 3.6 0 6.5-2.5 6.5-5.6S11.6 1.5 8 1.5Z"
+            fill="currentColor"
+            opacity="0.95"
+          />
+          <circle cx="5.5" cy="7.4" r="0.8" fill="#FAF7F0" />
+          <circle cx="8" cy="7.4" r="0.8" fill="#FAF7F0" />
+          <circle cx="10.5" cy="7.4" r="0.8" fill="#FAF7F0" />
+        </svg>
+      </span>
+      <span>{STRINGS.MENTOR.EXPLAIN_FROM_BANNER}</span>
+      <span className="outcome-banner__explain-arrow" aria-hidden="true">
+        →
+      </span>
+    </button>
   );
 }
 

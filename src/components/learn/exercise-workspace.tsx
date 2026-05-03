@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { MentorDrawer } from "@/components/mentor/mentor-drawer";
+import { MentorTrigger } from "@/components/mentor/mentor-trigger";
 import { STRINGS } from "@/lib/constants";
 import type { ExerciseSummary } from "@/lib/curriculum";
 import {
@@ -12,6 +14,7 @@ import {
   type SubmissionOutcome,
 } from "@/lib/exercises";
 import type { GamificationResult } from "@/lib/gamification";
+import { useMentorStore } from "@/stores/mentor-store";
 import { HintsPanel } from "./hints-panel";
 import { ResultsPanel } from "./results-panel";
 import { SqlEditor } from "./sql-editor";
@@ -53,9 +56,27 @@ export function ExerciseWorkspace({
     | { kind: "result"; outcome: SubmissionOutcome }
   >({ kind: "idle" });
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [errorEpoch, setErrorEpoch] = useState(0);
   const onCorrectRef = useRef(onCorrect);
   const onStatusRef = useRef(onStatusChange);
   const onLessonLikelyRef = useRef(onLessonLikelyComplete);
+
+  const setMentorLastError = useMentorStore((s) => s.setLastError);
+  const closeMentor = useMentorStore((s) => s.close);
+  const openMentor = useMentorStore((s) => s.openForExercise);
+
+  // When the workspace mounts for a new exercise, drop any stale error/drawer
+  // state from the previous exercise.
+  useEffect(() => {
+    closeMentor();
+    setMentorLastError(null);
+    return () => {
+      // Leaving this exercise — close drawer so it doesn't reappear in a
+      // half-stale state if the user lands on a sibling exercise.
+      closeMentor();
+      setMentorLastError(null);
+    };
+  }, [exerciseId, closeMentor, setMentorLastError]);
 
   useEffect(() => {
     onCorrectRef.current = onCorrect;
@@ -108,6 +129,7 @@ export function ExerciseWorkspace({
       onStatusRef.current(detail.id, outcome.user_status);
 
       if (outcome.status === "correct") {
+        setMentorLastError(null);
         const info: CorrectSubmissionInfo = {
           exerciseId: detail.id,
           isChapterQuiz: detail.is_chapter_quiz,
@@ -115,12 +137,47 @@ export function ExerciseWorkspace({
         };
         onCorrectRef.current(info);
         onLessonLikelyRef.current(info);
+      } else {
+        // Track the latest failure so the drawer's "Explain with AI"
+        // button knows what to feed the model.
+        setMentorLastError({
+          sql,
+          message: humanFailureSummary(outcome),
+        });
+        // Bumping epoch makes the trigger's pulse halo replay (it's keyed
+        // by this number).
+        setErrorEpoch((n) => n + 1);
       }
     } catch {
       setSubmission({ kind: "idle" });
       setSubmitError(STRINGS.EXERCISE.EDITOR.SUBMIT_ERROR);
     }
-  }, [detail, sql]);
+  }, [detail, setMentorLastError, sql]);
+
+  const handleExplainWithAI = useCallback(() => {
+    if (!detail) return;
+    const state = submission;
+    if (state.kind !== "result") return;
+    setMentorLastError({
+      sql,
+      message: humanFailureSummary(state.outcome),
+    });
+    openMentor(detail.id, detail.title);
+    // Defer one frame so the drawer's effect runs before we trigger the
+    // explain action (the drawer reads lastError from the store).
+    queueMicrotask(() => {
+      void useMentorStore.getState().sendExplainError({
+        sql,
+        errorMessage: humanFailureSummary(state.outcome),
+      });
+    });
+  }, [detail, submission, sql, setMentorLastError, openMentor]);
+
+  const handleInsertSql = useCallback((generated: string) => {
+    setSql(generated);
+    setSubmission({ kind: "idle" });
+    setSubmitError(null);
+  }, []);
 
   const handleReset = useCallback(() => {
     if (!detail) return;
@@ -265,11 +322,46 @@ export function ExerciseWorkspace({
             ) : null}
           </div>
 
-          <ResultsPanel state={submission} />
+          <ResultsPanel
+            state={submission}
+            onExplainWithAI={handleExplainWithAI}
+          />
         </section>
       </div>
+
+      <MentorTrigger
+        exerciseId={detail.id}
+        exerciseTitle={detail.title}
+        hasError={
+          submission.kind === "result" &&
+          submission.outcome.status !== "correct"
+        }
+        errorEpoch={errorEpoch}
+      />
+      <MentorDrawer currentSql={sql} onInsertSql={handleInsertSql} />
     </div>
   );
+}
+
+function humanFailureSummary(outcome: SubmissionOutcome): string {
+  switch (outcome.status) {
+    case "syntax_error":
+      return `Syntax error from PostgreSQL:\n${outcome.message}`;
+    case "execution_error":
+      return `PostgreSQL refused to run the query:\n${outcome.message}`;
+    case "timeout":
+      return `Query timed out: ${outcome.message}`;
+    case "forbidden":
+      return `Forbidden operation: ${outcome.message}`;
+    case "incorrect": {
+      const reason = outcome.reason
+        ? ` (${outcome.reason.replace(/_/g, " ")})`
+        : "";
+      return `My result didn't match the expected one${reason}. ${outcome.message}`;
+    }
+    default:
+      return outcome.message;
+  }
 }
 
 function WorkspaceSkeleton() {

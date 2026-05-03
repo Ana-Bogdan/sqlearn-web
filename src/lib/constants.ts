@@ -352,4 +352,53 @@ export const STRINGS = {
     SHOW_PASSWORD: "Show password",
     HIDE_PASSWORD: "Hide password",
   },
+
+  MENTOR: {
+    EYEBROW: "AI Mentor",
+    HEADING: "Sit with the problem.",
+    SUBHEADING:
+      "Ask for a nudge, a deeper hint, or an explanation of an error. Your conversation stays here while you work on this exercise.",
+    OPEN_FAB: "Open AI Mentor",
+    OPEN_FAB_BADGE: "Stuck?",
+    CLOSE: "Close mentor",
+    RESET: "Clear conversation",
+    EXPLAIN_FROM_BANNER: "Explain with AI",
+    HINT_BUTTON: "Ask AI for a hint",
+    HINT_BUTTON_FIRST: "Ask AI for help",
+    HINT_BUTTON_NEXT: "Ask for a deeper hint",
+    HINT_COUNTER: (used: number, total: number) =>
+      `Hint ${used} of ${total}`,
+    HINT_REMAINING: (left: number) =>
+      `${left} ${left === 1 ? "AI hint" : "AI hints"} left`,
+    HINT_CAP_REACHED: "No more AI hints available for this exercise.",
+    HINT_CAP_HELPER:
+      "Try writing a query and use Explain Error if it doesn't work.",
+    NL_INPUT_LABEL: "Describe the query in plain English",
+    NL_INPUT_PLACEHOLDER:
+      "e.g. Top three customers by total order value last month",
+    NL_SEND: "Generate SQL",
+    NL_SEND_PENDING: "Thinking…",
+    EXPLAIN_PENDING: "Reading the error…",
+    HINT_PENDING: "Composing a hint…",
+    INSERT_INTO_EDITOR: "Insert into editor",
+    INSERTED: "Pasted into editor",
+    EMPTY_TITLE: "How can I help?",
+    EMPTY_BODY:
+      "Ask for a hint when you feel stuck, or click “Explain with AI” when a query fails.",
+    EMPTY_HINT_TIP: "Tip: AI hints get more specific each time you ask.",
+    OFFLINE_TITLE: "Mentor is offline",
+    SENDING: "Sending…",
+    USER_LABEL: "You",
+    MENTOR_LABEL: "Mentor",
+    YOU_ASKED_HINT: (level: number) =>
+      level === 1
+        ? "I'd like a gentle hint."
+        : `I'd like hint ${level} — go a little deeper.`,
+    YOU_ASKED_EXPLAIN: "Can you walk me through this error?",
+    OUTCOME_RATE_LIMITED: "Rate limit reached",
+    OUTCOME_HINT_CAP: "Hint limit reached",
+    OUTCOME_GEMINI_ERROR: "Mentor unavailable",
+    OUTCOME_TIMEOUT: "Mentor timed out",
+    OUTCOME_INVALID: "Couldn't process that input",
+  },
 } as const;
