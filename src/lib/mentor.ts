@@ -31,7 +31,8 @@ interface BaseRequest {
 }
 
 export interface ExplainErrorRequest extends BaseRequest {
-  exercise_id: number;
+  // Optional: omitted (or null) when the failure happened in the free Sandbox.
+  exercise_id?: number | null;
   sql_text: string;
   error_message: string;
 }

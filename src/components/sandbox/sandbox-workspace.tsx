@@ -134,14 +134,17 @@ export function SandboxWorkspace() {
 
   const handleExplainWithAI = useCallback(
     (errorMessage: string) => {
-      // Sandbox NL-to-SQL drawer doesn't have an "explain error" mode, so we
-      // just open it and prefill the input draft with the error context.
+      // Mirror the lesson flow: open the drawer and immediately fire an
+      // explain-error request. The store handles the rest — message bubble,
+      // pending state, and Gemini fallback. No prefilled NL textarea, since
+      // that would route through the NL-to-SQL strategy and return code
+      // instead of an explanation.
       openMentorForSandbox();
-      useMentorStore
-        .getState()
-        .setInputDraft(`Why did this fail?\n\n${errorMessage}`);
+      const store = useMentorStore.getState();
+      store.setLastError({ sql, message: errorMessage });
+      void store.sendExplainError({ sql, errorMessage });
     },
-    [openMentorForSandbox],
+    [openMentorForSandbox, sql],
   );
 
   const handleInsertSql = useCallback((sqlBlock: string) => {

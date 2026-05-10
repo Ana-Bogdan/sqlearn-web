@@ -177,7 +177,7 @@ export const useMentorStore = create<MentorState>((set, get) => ({
 
   async sendExplainError({ sql, errorMessage }) {
     const ctx = get().context;
-    if (!ctx || ctx.kind !== "exercise" || ctx.exerciseId == null) return;
+    if (!ctx) return;
     if (get().sending) return;
 
     const userMsg: MentorMessage = {
@@ -196,7 +196,8 @@ export const useMentorStore = create<MentorState>((set, get) => ({
 
     try {
       const response = await explainErrorRequest({
-        exercise_id: ctx.exerciseId,
+        exercise_id:
+          ctx.kind === "exercise" ? ctx.exerciseId : null,
         sql_text: sql,
         error_message: errorMessage,
         history: toBackendHistory(get().messages.slice(0, -1)),

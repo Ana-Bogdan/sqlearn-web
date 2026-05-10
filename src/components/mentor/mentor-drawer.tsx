@@ -53,7 +53,9 @@ export function MentorDrawer({ currentSql, onInsertSql }: MentorDrawerProps) {
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const threadRef = useRef<HTMLDivElement | null>(null);
 
-  // Focus management: capture/return focus, and Esc to close.
+  // Focus management: capture/return focus, and Esc to close. The page
+  // underneath stays scrollable so the learner can keep looking at the
+  // query and results that prompted the question.
   useEffect(() => {
     if (!isOpen) return;
     previousFocusRef.current = document.activeElement as HTMLElement | null;
@@ -65,10 +67,6 @@ export function MentorDrawer({ currentSql, onInsertSql }: MentorDrawerProps) {
       }
     };
     window.addEventListener("keydown", handleKey);
-
-    // Lock background scroll while open.
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
 
     // Focus the drawer's primary action shortly after mount.
     const t = window.setTimeout(() => {
@@ -82,7 +80,6 @@ export function MentorDrawer({ currentSql, onInsertSql }: MentorDrawerProps) {
 
     return () => {
       window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = prevOverflow;
       window.clearTimeout(t);
       previousFocusRef.current?.focus?.();
     };
@@ -95,6 +92,33 @@ export function MentorDrawer({ currentSql, onInsertSql }: MentorDrawerProps) {
     if (!node) return;
     node.scrollTop = node.scrollHeight;
   }, [isOpen, messages.length, sending]);
+
+  // Block wheel events that target the drawer's non-scrollable regions
+  // (header, footer, empty thread) from bubbling out and scrolling the
+  // page underneath. The thread itself is already scroll-contained via
+  // `overscroll-behavior: contain` in CSS.
+  useEffect(() => {
+    if (!isOpen) return;
+    const drawer = drawerRef.current;
+    const thread = threadRef.current;
+    if (!drawer) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (
+        thread &&
+        thread.contains(e.target as Node) &&
+        thread.scrollHeight > thread.clientHeight
+      ) {
+        return;
+      }
+      e.preventDefault();
+    };
+
+    drawer.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      drawer.removeEventListener("wheel", handleWheel);
+    };
+  }, [isOpen]);
 
   const isExerciseMode = context?.kind === "exercise";
   const isSandboxMode = context?.kind === "sandbox";

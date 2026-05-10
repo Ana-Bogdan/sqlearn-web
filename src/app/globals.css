@@ -3126,11 +3126,6 @@
   to   { transform: translate3d(0, 0, 0); }
 }
 
-@keyframes mentor-backdrop-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
 @keyframes mentor-bubble-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -3163,12 +3158,10 @@
 .mentor-drawer-backdrop {
   position: absolute;
   inset: 0;
-  /* Warm tint over content rather than cold dim — keeps the mood */
-  background:
-    radial-gradient(120% 80% at 90% 0%, rgba(185, 153, 164, 0.18) 0%, transparent 60%),
-    rgba(58, 50, 42, 0.32);
-  backdrop-filter: blur(2px);
-  animation: mentor-backdrop-in 240ms ease-out both;
+  /* Transparent layer kept for click-to-close. The drawer's own drop
+     shadow handles visual separation from the page content, so the
+     learner can keep eyes on the query they just ran. */
+  background: transparent;
 }
 
 .mentor-drawer {
@@ -3287,6 +3280,9 @@
 
 .mentor-drawer__thread {
   overflow-y: auto;
+  /* Stop scroll chaining: when the thread reaches its top or bottom,
+     wheel events do not bubble out to scroll the page underneath. */
+  overscroll-behavior: contain;
   padding: 1.1rem 1.25rem 1.5rem;
   scrollbar-color: rgba(70, 60, 51, 0.25) transparent;
   scrollbar-width: thin;
