@@ -17,6 +17,7 @@ interface NavLink {
 const NAV_LINKS: NavLink[] = [
   { href: "/dashboard", label: "Dashboard", match: (p) => p === "/dashboard" },
   { href: "/learn", label: "Learn", match: (p) => p.startsWith("/learn") },
+  { href: "/sandbox", label: "Sandbox", match: (p) => p.startsWith("/sandbox") },
   {
     href: "/leaderboard",
     label: "Leaderboard",

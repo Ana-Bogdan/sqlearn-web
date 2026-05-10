@@ -348,6 +348,74 @@ export const STRINGS = {
     },
   },
 
+  SANDBOX: {
+    EYEBROW: "Free sandbox",
+    HEADING: "Play with the data",
+    SUBHEADING:
+      "An e-commerce dataset to query however you like. Joins, aggregates, even writes — the schema below resets in one click.",
+    SCHEMA_HEADING: "Schema",
+    SCHEMA_HINT: "Tap a table to see its columns.",
+    SCHEMA_LOADING: "Loading the playground…",
+    SCHEMA_ERROR: "We couldn't load the schema. Try again in a moment.",
+    SCHEMA_EMPTY:
+      "The playground hasn't been seeded yet. Ask an instructor to run seed_playground.",
+    SCHEMA_TABLES: (n: number) =>
+      `${n} ${n === 1 ? "table" : "tables"}`,
+    SCHEMA_ROWS: (n: number) => `${n.toLocaleString()} ${n === 1 ? "row" : "rows"}`,
+    SCHEMA_COLUMNS: (n: number) =>
+      `${n} ${n === 1 ? "column" : "columns"}`,
+    SCHEMA_NULLABLE: "nullable",
+    SCHEMA_REFRESH: "Refresh",
+    SCHEMA_COPIED: (identifier: string) => `Copied ${identifier} to clipboard`,
+    SCHEMA_COPY_FAILED: "Couldn't copy — your browser blocked clipboard access.",
+    EDITOR: {
+      TAB_LABEL: "playground.sql",
+      RUN: "Run query",
+      RUN_PENDING: "Running…",
+      RUN_SHORTCUT_NOTE: "to run",
+      RESET: "Reset playground",
+      RESET_PENDING: "Resetting…",
+      RESET_TOOLTIP:
+        "Restore the playground tables and rows to their seeded state.",
+      PLACEHOLDER:
+        "-- Try: SELECT country, COUNT(*) FROM customers GROUP BY country;",
+      EMPTY_SQL: "Write a query first — the editor is empty.",
+      RUN_ERROR:
+        "We couldn't run your query. Check your connection and try again.",
+      AI_ASSIST: "Ask AI",
+    },
+    RESULTS: {
+      OK_TITLE: "Query ran",
+      OK_BODY: (rows: number) =>
+        `${rows.toLocaleString()} ${rows === 1 ? "row" : "rows"} returned.`,
+      WRITE_BODY: (rows: number) =>
+        `${rows.toLocaleString()} ${rows === 1 ? "row" : "rows"} affected.`,
+      IDLE_TITLE: "Run something",
+      IDLE_BODY:
+        "Pick a table on the left, write a query, and press ⌘+Enter. Results show up here.",
+      RUNNING: "Executing your query…",
+      EMPTY: "The query returned no columns.",
+      NO_ROWS: "No rows returned.",
+      TABLE_META: (rows: number, cols: number) =>
+        `${rows} ${rows === 1 ? "row" : "rows"} · ${cols} ${cols === 1 ? "column" : "columns"}`,
+      TRUNCATED: (shown: number, total: number) =>
+        `Showing the first ${shown} of ${total} rows.`,
+      RESET_DONE: "Playground reset.",
+    },
+    BANNER: {
+      SYNTAX_TITLE: "Syntax error",
+      EXECUTION_TITLE: "Query couldn't run",
+      TIMEOUT_TITLE: "Query took too long",
+      FORBIDDEN_TITLE: "Not allowed in the playground",
+    },
+    BADGE_TOAST: {
+      EYEBROW: "Badge earned",
+      DISMISS: "Dismiss",
+    },
+    AI_LAUNCH: "AI Mentor",
+    AI_LAUNCH_SUB: "Translate plain English into SQL",
+  },
+
   FORM: {
     SHOW_PASSWORD: "Show password",
     HIDE_PASSWORD: "Hide password",
