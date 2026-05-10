@@ -7,13 +7,26 @@ import { useState } from "react";
 import { STRINGS } from "@/lib/constants";
 import { useAuthStore } from "@/stores/auth-store";
 
-const NAV_LINKS: Array<{ href: string; label: string; match: (p: string) => boolean }> = [
+interface NavLink {
+  href: string;
+  label: string;
+  match: (p: string) => boolean;
+  adminOnly?: boolean;
+}
+
+const NAV_LINKS: NavLink[] = [
   { href: "/dashboard", label: "Dashboard", match: (p) => p === "/dashboard" },
   { href: "/learn", label: "Learn", match: (p) => p.startsWith("/learn") },
   {
     href: "/leaderboard",
     label: "Leaderboard",
     match: (p) => p.startsWith("/leaderboard"),
+  },
+  {
+    href: "/admin",
+    label: "Admin",
+    match: (p) => p.startsWith("/admin"),
+    adminOnly: true,
   },
 ];
 
@@ -60,7 +73,9 @@ export function Navbar() {
 
           {user ? (
             <div className="hidden items-center gap-1 md:flex">
-              {NAV_LINKS.map((link) => {
+              {NAV_LINKS.filter(
+                (link) => !link.adminOnly || user.role === "admin",
+              ).map((link) => {
                 const active = link.match(pathname ?? "");
                 return (
                   <Link

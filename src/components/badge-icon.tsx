@@ -40,6 +40,8 @@ const ICON_MAP: Record<string, LucideIcon> = {
   star: Star,
 };
 
+export const BADGE_ICON_OPTIONS: ReadonlyArray<string> = Object.keys(ICON_MAP);
+
 interface BadgeIconProps {
   name: string | null | undefined;
   size?: number;
