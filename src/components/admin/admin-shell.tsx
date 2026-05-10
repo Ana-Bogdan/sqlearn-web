@@ -16,6 +16,21 @@ const NAV: Array<{
     match: (p) => p === "/admin",
   },
   {
+    href: "/admin/chapters",
+    label: "Curriculum",
+    hint: "Chapters, lessons, exercises",
+    match: (p) =>
+      p.startsWith("/admin/chapters") ||
+      p.startsWith("/admin/lessons") ||
+      p.startsWith("/admin/exercises"),
+  },
+  {
+    href: "/admin/datasets",
+    label: "Datasets",
+    hint: "Sandbox schemas",
+    match: (p) => p.startsWith("/admin/datasets"),
+  },
+  {
     href: "/admin/users",
     label: "Users",
     hint: "Roster & access",
@@ -68,9 +83,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className="admin-sidebar__footer">
-          <p className="admin-sidebar__footer-eyebrow">Coming next</p>
+          <p className="admin-sidebar__footer-eyebrow">Tip</p>
           <p className="admin-sidebar__footer-body">
-            Curriculum authoring · Datasets · Lesson editor.
+            Author a draft, link a dataset, then click <em>Test solution</em>{" "}
+            to capture the expected result.
           </p>
         </div>
       </aside>
