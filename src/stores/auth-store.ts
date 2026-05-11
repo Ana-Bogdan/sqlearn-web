@@ -32,6 +32,7 @@ interface AuthState {
   login: (payload: LoginPayload) => Promise<User>;
   register: (payload: RegisterPayload) => Promise<User>;
   logout: () => Promise<void>;
+  setUser: (user: User) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -68,5 +69,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     } finally {
       set({ user: null, status: "unauthenticated" });
     }
+  },
+
+  setUser(user) {
+    set({ user, status: "authenticated" });
   },
 }));

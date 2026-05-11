@@ -421,6 +421,94 @@ export const STRINGS = {
     HIDE_PASSWORD: "Hide password",
   },
 
+  SETTINGS: {
+    EYEBROW: "Account",
+    HEADING: "Settings",
+    SUBHEADING:
+      "Update how you appear on SQLearn and the password that signs you in.",
+    NAV_LABEL: "Settings",
+    SECTIONS: {
+      PROFILE: "Profile",
+      PROFILE_HINT: "Your name shows on the leaderboard and your profile page.",
+      PASSWORD: "Password",
+      PASSWORD_HINT:
+        "Choose something only you would think of. We'll keep you signed in after the change.",
+      DANGER: "Sign out",
+      DANGER_HINT: "End this session on this device.",
+    },
+    PROFILE: {
+      FIRST_NAME_LABEL: "First name",
+      LAST_NAME_LABEL: "Last name",
+      EMAIL_LABEL: "Email",
+      EMAIL_LOCKED_HINT: "Your email signs you in — it can't be changed here.",
+      SUBMIT: "Save changes",
+      SUBMIT_PENDING: "Saving…",
+      SUCCESS: "Profile updated.",
+      NO_CHANGES: "Nothing to save yet.",
+      ERRORS: {
+        FIRST_NAME_REQUIRED: "Enter your first name.",
+        LAST_NAME_REQUIRED: "Enter your last name.",
+        FALLBACK: "We couldn't save your changes. Please try again.",
+      },
+    },
+    PASSWORD: {
+      CURRENT_LABEL: "Current password",
+      CURRENT_PLACEHOLDER: "Enter your current password",
+      NEW_LABEL: "New password",
+      NEW_PLACEHOLDER: "At least 8 characters",
+      CONFIRM_LABEL: "Confirm new password",
+      CONFIRM_PLACEHOLDER: "Re-enter the new password",
+      SUBMIT: "Update password",
+      SUBMIT_PENDING: "Updating…",
+      SUCCESS: "Password updated. You're still signed in.",
+      ERRORS: {
+        CURRENT_REQUIRED: "Enter your current password.",
+        NEW_REQUIRED: "Enter a new password.",
+        MISMATCH: "Passwords don't match.",
+        FALLBACK: "We couldn't update your password. Please try again.",
+      },
+    },
+    SIGN_OUT: "Sign out",
+    SIGN_OUT_PENDING: "Signing out…",
+    SIDE_PANEL: {
+      EYEBROW: "Signed in as",
+      MEMBER_SINCE: (date: string) => `Member since ${date}`,
+      LEVEL_LINE: (level: number, title: string) =>
+        `Level ${level} · ${title}`,
+      EMAIL_LABEL: "Email",
+      ROLE_LABEL: "Role",
+      ROLE_LEARNER: "Learner",
+      ROLE_ADMIN: "Admin",
+    },
+  },
+
+  NOT_FOUND: {
+    EYEBROW: "404",
+    HEADING: "We couldn't find that page.",
+    BODY:
+      "The link may be broken, or the page may have moved. Head back to your dashboard or pick up where you left off.",
+    PRIMARY_CTA: "Back to dashboard",
+    SECONDARY_CTA: "Open curriculum",
+    PUBLIC_PRIMARY_CTA: "Back to home",
+    PUBLIC_SECONDARY_CTA: "Sign in",
+  },
+
+  ERROR: {
+    EYEBROW: "Unexpected error",
+    HEADING: "Something went sideways.",
+    BODY:
+      "We hit a problem rendering this page. Try again, or head back to a place you know works.",
+    RETRY: "Try again",
+    BACK_HOME: "Back to dashboard",
+  },
+
+  LOCK: {
+    LESSON_BADGE: "Locked",
+    LESSON_TIP: "Finish the previous lesson to unlock this one.",
+    QUIZ_BADGE: "Quiz locked",
+    QUIZ_TIP: "Complete every lesson in this chapter to unlock the quiz.",
+  },
+
   MENTOR: {
     EYEBROW: "AI Mentor",
     HEADING: "Sit with the problem.",

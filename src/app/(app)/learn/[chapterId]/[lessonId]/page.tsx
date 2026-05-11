@@ -245,6 +245,23 @@ export default function LessonPage({ params }: LessonPageProps) {
     return <LessonSkeleton />;
   }
 
+  // The lesson loads from `/api/lessons/{id}/` without lock context, so we
+  // derive lock state from the chapter detail's lesson list.
+  const lessonInChapter = chapter.lessons.find((l) => l.id === lesson.id);
+  if (lessonInChapter?.is_locked) {
+    const previousLesson = [...chapter.lessons]
+      .sort((a, b) => a.order - b.order)
+      .filter((l) => l.order < lesson.order && !l.is_locked)
+      .pop();
+    return (
+      <LockedLesson
+        chapter={chapter}
+        lesson={lesson}
+        previousLesson={previousLesson ?? null}
+      />
+    );
+  }
+
   const theoryHtml = lesson.theory_content
     ? renderTheoryMarkdown(lesson.theory_content)
     : "";
@@ -655,19 +672,105 @@ function LessonNav({
         <span />
       )}
       {next ? (
-        <Link
-          href={`/learn/${chapterId}/${next.id}`}
-          className="group/nav flex flex-col rounded-xl border border-transparent px-4 py-3 text-right transition-all duration-300 ease-out hover:border-border/70 hover:bg-card/70 sm:col-start-2"
-        >
-          <span className="ml-auto inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-dusk transition-transform duration-300 group-hover/nav:translate-x-0.5">
-            {STRINGS.LESSON.NEXT_LESSON} <ArrowRight />
-          </span>
-          <span className="mt-1 truncate text-[0.9375rem] font-semibold text-taupe">
-            {next.title}
-          </span>
-        </Link>
+        next.is_locked ? (
+          <div
+            className="flex cursor-not-allowed flex-col rounded-xl border border-transparent px-4 py-3 text-right opacity-70 sm:col-start-2"
+            aria-disabled="true"
+            title={STRINGS.LOCK.LESSON_TIP}
+          >
+            <span className="ml-auto inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <LockGlyph /> {STRINGS.LOCK.LESSON_BADGE}
+            </span>
+            <span className="mt-1 truncate text-[0.9375rem] font-semibold text-taupe/65">
+              {next.title}
+            </span>
+          </div>
+        ) : (
+          <Link
+            href={`/learn/${chapterId}/${next.id}`}
+            className="group/nav flex flex-col rounded-xl border border-transparent px-4 py-3 text-right transition-all duration-300 ease-out hover:border-border/70 hover:bg-card/70 sm:col-start-2"
+          >
+            <span className="ml-auto inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-dusk transition-transform duration-300 group-hover/nav:translate-x-0.5">
+              {STRINGS.LESSON.NEXT_LESSON} <ArrowRight />
+            </span>
+            <span className="mt-1 truncate text-[0.9375rem] font-semibold text-taupe">
+              {next.title}
+            </span>
+          </Link>
+        )
       ) : null}
     </nav>
+  );
+}
+
+function LockGlyph() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 16 16" aria-hidden="true">
+      <path
+        d="M5 7V5a3 3 0 1 1 6 0v2m-7.5 0h9a.5.5 0 0 1 .5.5v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-5a.5.5 0 0 1 .5-.5z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function LockedLesson({
+  chapter,
+  lesson,
+  previousLesson,
+}: {
+  chapter: ChapterDetail;
+  lesson: LessonDetail;
+  previousLesson: LessonListItem | null;
+}) {
+  return (
+    <div className="mx-auto w-full max-w-[88rem] px-6 pb-20 pt-8 lg:px-10 lg:pt-10">
+      <Breadcrumbs chapter={chapter} lesson={lesson} />
+
+      <header className="mt-5 border-b border-border/60 pb-5">
+        <p className="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-dusk/70">
+          {STRINGS.LEARN.CHAPTER_LABEL} {String(chapter.order).padStart(2, "0")} ·
+          Lesson {lesson.order}
+        </p>
+        <h1 className="mt-2 text-[1.875rem] font-bold leading-tight tracking-[-0.02em] text-taupe lg:text-[2.125rem]">
+          {lesson.title}
+        </h1>
+      </header>
+
+      <div className="mt-12 flex flex-col items-center text-center">
+        <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-full border border-border/70 bg-card/85 text-dusk shadow-[0_18px_36px_-26px_rgba(70,60,51,0.45)]">
+          <LockGlyph />
+          <span className="sr-only">Locked</span>
+        </div>
+        <h2 className="mt-6 max-w-md text-[1.4rem] font-bold tracking-[-0.018em] text-taupe">
+          {STRINGS.LOCK.LESSON_BADGE}
+        </h2>
+        <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+          {STRINGS.LOCK.LESSON_TIP}
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          {previousLesson ? (
+            <Link
+              href={`/learn/${chapter.id}/${previousLesson.id}`}
+              className="status-cta status-cta--primary"
+            >
+              Open {previousLesson.title}
+              <span className="status-cta__arrow" aria-hidden="true">
+                →
+              </span>
+            </Link>
+          ) : null}
+          <Link href="/learn" className="status-cta status-cta--ghost">
+            {STRINGS.LESSON.BACK}
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
 

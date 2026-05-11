@@ -21,6 +21,7 @@ export interface LessonListItem {
   total_exercises: number;
   completed_exercises: number;
   is_completed: boolean;
+  is_locked: boolean;
 }
 
 export interface ExerciseSummary {
@@ -30,6 +31,7 @@ export interface ExerciseSummary {
   order: number;
   is_chapter_quiz: boolean;
   user_status: ExerciseStatus;
+  is_locked: boolean;
 }
 
 export interface ChapterDetail extends ChapterListItem {
@@ -58,6 +60,12 @@ export function fetchLesson(id: number | string) {
 export function pickResumeLesson(lessons: LessonListItem[]): LessonListItem | null {
   if (lessons.length === 0) return null;
   const sorted = [...lessons].sort((a, b) => a.order - b.order);
-  const firstIncomplete = sorted.find((l) => !l.is_completed);
-  return firstIncomplete ?? sorted[sorted.length - 1];
+  // Skip locked lessons — they can't be resumed even if marked incomplete.
+  const firstIncomplete = sorted.find((l) => !l.is_completed && !l.is_locked);
+  if (firstIncomplete) return firstIncomplete;
+  // No unlocked-but-incomplete lesson: fall back to the last unlocked one (so
+  // the dashboard "resume" link still lands on something the learner can open).
+  const reversed = [...sorted].reverse();
+  const lastUnlocked = reversed.find((l) => !l.is_locked);
+  return lastUnlocked ?? sorted[0];
 }
