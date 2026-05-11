@@ -7634,6 +7634,284 @@
 }
 
 /* ──────────────────────────────────────────────────────────
+   Badge celebration — center-screen overlay with confetti
+   ────────────────────────────────────────────────────────── */
+
+.badge-celebration-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(34, 29, 25, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fade-in 280ms ease-out both;
+  overflow: hidden;
+}
+
+.badge-celebration-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.badge-celebration-confetti__piece {
+  position: absolute;
+  top: -10vh;
+  border-radius: 1px;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation-name: confetti-fall;
+  animation-timing-function: cubic-bezier(0.36, 0.13, 0.52, 1);
+  animation-fill-mode: forwards;
+  box-shadow: 0 0 0 0.5px rgba(70, 60, 51, 0.08);
+}
+
+.badge-celebration-confetti__piece--round {
+  border-radius: 999px;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--drift, 0px), 110vh, 0) rotate(var(--rot, 720deg));
+    opacity: 0;
+  }
+}
+
+.badge-celebration-card {
+  position: relative;
+  width: min(26rem, 100%);
+  padding: 1.55rem 2rem 1.85rem;
+  border-radius: 1.35rem;
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(234, 212, 192, 0.3) 0%, transparent 55%),
+    radial-gradient(120% 140% at 0% 100%, rgba(185, 153, 164, 0.3) 0%, transparent 55%),
+    linear-gradient(180deg, #3E5570 0%, #2f4159 100%);
+  color: #F5F1E5;
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.18) inset,
+    0 32px 64px -24px rgba(20, 26, 40, 0.65);
+  text-align: center;
+  overflow: hidden;
+  animation: lesson-complete-pop 540ms var(--ease-out-expo) both;
+}
+
+.badge-celebration-card__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(245, 241, 229, 0.55);
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-out-quart),
+    color 200ms var(--ease-out-quart);
+}
+
+.badge-celebration-card__close:hover {
+  background: rgba(245, 241, 229, 0.1);
+  color: #F5F1E5;
+}
+
+.badge-celebration-card__close:focus-visible {
+  outline: 2px solid #EAD4C0;
+  outline-offset: 2px;
+}
+
+.badge-celebration-card__counter {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(234, 212, 192, 0.65);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.55rem;
+}
+
+.badge-celebration-card__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #EAD4C0;
+  font-weight: 600;
+}
+
+.badge-celebration-card__medallion {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 132px;
+  height: 132px;
+  margin: 1.1rem auto 0.95rem;
+}
+
+.badge-celebration-card__medallion-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(60% 60% at 30% 28%, rgba(255, 253, 248, 0.95) 0%, rgba(245, 241, 229, 0.85) 45%, rgba(222, 202, 169, 0.78) 100%);
+  box-shadow:
+    0 0 0 1px rgba(185, 153, 164, 0.55),
+    0 0 0 6px rgba(234, 212, 192, 0.18),
+    0 0 32px rgba(234, 212, 192, 0.4),
+    0 12px 28px -10px rgba(20, 26, 40, 0.45),
+    0 1px 0 0 rgba(255, 255, 255, 0.7) inset;
+  animation: medallion-settle 720ms var(--ease-out-expo) 80ms both;
+}
+
+.badge-celebration-card__medallion-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #3E5570;
+  filter: drop-shadow(0 2px 4px rgba(70, 60, 51, 0.18));
+  animation: medallion-icon-in 720ms var(--ease-out-expo) 200ms both;
+}
+
+@keyframes medallion-settle {
+  from {
+    transform: scale(0.62);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes medallion-icon-in {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.badge-celebration-card__name {
+  margin-top: 0.3rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #F5F1E5;
+  animation: badge-celebration-rise 460ms var(--ease-out-expo) 300ms both;
+}
+
+.badge-celebration-card__category {
+  margin: 0.65rem auto 0;
+  display: inline-block;
+  padding: 0.28rem 0.72rem;
+  border-radius: 999px;
+  background: rgba(185, 153, 164, 0.22);
+  color: #EAD4C0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  animation: badge-celebration-rise 460ms var(--ease-out-expo) 380ms both;
+}
+
+.badge-celebration-card__description {
+  margin: 0.95rem auto 0;
+  max-width: 28ch;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: rgba(245, 241, 229, 0.82);
+  animation: badge-celebration-rise 460ms var(--ease-out-expo) 460ms both;
+}
+
+.badge-celebration-card__cta {
+  margin-top: 1.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.78rem 1.65rem;
+  border-radius: 0.7rem;
+  background: #EAD4C0;
+  color: #2f4159;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.45) inset;
+  transition:
+    background-color 220ms var(--ease-out-quart),
+    transform 220ms var(--ease-out-quart);
+  animation: badge-celebration-rise 460ms var(--ease-out-expo) 540ms both;
+}
+
+.badge-celebration-card__cta:hover {
+  background: #F0DCC9;
+  transform: translateY(-1px);
+}
+
+.badge-celebration-card__cta:focus-visible {
+  outline: 2px solid #EAD4C0;
+  outline-offset: 3px;
+}
+
+@keyframes badge-celebration-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-celebration-backdrop,
+  .badge-celebration-card,
+  .badge-celebration-card__counter,
+  .badge-celebration-card__eyebrow,
+  .badge-celebration-card__medallion-ring,
+  .badge-celebration-card__medallion-icon,
+  .badge-celebration-card__name,
+  .badge-celebration-card__category,
+  .badge-celebration-card__description,
+  .badge-celebration-card__cta {
+    animation: none !important;
+  }
+  .badge-celebration-confetti {
+    display: none;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
    Settings
    ────────────────────────────────────────────────────────── */
 

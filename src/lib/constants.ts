@@ -286,6 +286,18 @@ export const STRINGS = {
       EMPTY_INSTRUCTIONS:
         "This exercise doesn't have written instructions yet.",
     },
+    BADGE_CELEBRATION: {
+      EYEBROW: "Badge unlocked",
+      CONTINUE: "Continue",
+      DISMISS: "Close",
+      COUNTER: (current: number, total: number) => `${current} of ${total}`,
+      CATEGORY: {
+        milestone: "Milestone",
+        skill: "Skill",
+        streak: "Streak",
+        fun: "Discovery",
+      },
+    },
     EDITOR: {
       TAB_LABEL: "query.sql",
       RUN: "Run query",

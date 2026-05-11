@@ -13,11 +13,31 @@ import {
   type ExerciseHint,
   type SubmissionOutcome,
 } from "@/lib/exercises";
-import type { GamificationResult } from "@/lib/gamification";
+import type { Badge, GamificationResult } from "@/lib/gamification";
 import { useMentorStore } from "@/stores/mentor-store";
+import { BadgeCelebration } from "./badge-celebration";
 import { HintsPanel } from "./hints-panel";
 import { ResultsPanel } from "./results-panel";
 import { SqlEditor } from "./sql-editor";
+
+interface BadgeQueueState {
+  active: Badge | null;
+  pending: Badge[];
+  // Total in the current batch — used so the celebration can show "1 of 2".
+  // Resets when the queue empties.
+  batchSize: number;
+}
+
+function startBatch(badges: Badge[]): BadgeQueueState {
+  const [first, ...rest] = badges;
+  return { active: first ?? null, pending: rest, batchSize: badges.length };
+}
+
+function dequeue(state: BadgeQueueState): BadgeQueueState {
+  const [next, ...rest] = state.pending;
+  if (!next) return { active: null, pending: [], batchSize: 0 };
+  return { active: next, pending: rest, batchSize: state.batchSize };
+}
 
 export interface CorrectSubmissionInfo {
   exerciseId: number;
@@ -57,6 +77,16 @@ export function ExerciseWorkspace({
   >({ kind: "idle" });
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [errorEpoch, setErrorEpoch] = useState(0);
+  const [badgeState, setBadgeState] = useState<BadgeQueueState>({
+    active: null,
+    pending: [],
+    batchSize: 0,
+  });
+  // Lesson-complete fires the post-lesson modal in the parent. When badges
+  // are celebrating center-screen, we hold the trigger here and release it
+  // after the user dismisses the last badge — otherwise the two overlays
+  // stack and fight for attention.
+  const pendingLessonCompleteRef = useRef<CorrectSubmissionInfo | null>(null);
   const onCorrectRef = useRef(onCorrect);
   const onStatusRef = useRef(onStatusChange);
   const onLessonLikelyRef = useRef(onLessonLikelyComplete);
@@ -135,8 +165,14 @@ export function ExerciseWorkspace({
           isChapterQuiz: detail.is_chapter_quiz,
           gamification: outcome.gamification,
         };
+        const newBadges = outcome.gamification?.badges_earned ?? [];
         onCorrectRef.current(info);
-        onLessonLikelyRef.current(info);
+        if (newBadges.length > 0) {
+          setBadgeState(startBatch(newBadges));
+          pendingLessonCompleteRef.current = info;
+        } else {
+          onLessonLikelyRef.current(info);
+        }
       } else {
         // Track the latest failure so the drawer's "Explain with AI"
         // button knows what to feed the model.
@@ -177,6 +213,20 @@ export function ExerciseWorkspace({
     setSql(generated);
     setSubmission({ kind: "idle" });
     setSubmitError(null);
+  }, []);
+
+  const handleDismissBadge = useCallback(() => {
+    setBadgeState((state) => {
+      const next = dequeue(state);
+      if (!next.active && pendingLessonCompleteRef.current) {
+        const info = pendingLessonCompleteRef.current;
+        pendingLessonCompleteRef.current = null;
+        // Defer one tick so the overlay has finished unmounting before the
+        // lesson-complete modal animates in.
+        queueMicrotask(() => onLessonLikelyRef.current(info));
+      }
+      return next;
+    });
   }, []);
 
   const handleReset = useCallback(() => {
@@ -338,6 +388,12 @@ export function ExerciseWorkspace({
         </section>
       </div>
 
+      <BadgeCelebration
+        badge={badgeState.active}
+        current={badgeState.batchSize - badgeState.pending.length}
+        total={badgeState.batchSize}
+        onDismiss={handleDismissBadge}
+      />
       <MentorDrawer currentSql={sql} onInsertSql={handleInsertSql} />
     </div>
   );
