@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { BadgeIcon } from "@/components/badge-icon";
 import { STRINGS } from "@/lib/constants";
@@ -78,7 +78,6 @@ export function BadgeCelebration({
   total,
   onDismiss,
 }: BadgeCelebrationProps) {
-  const dialogRef = useRef<HTMLDivElement | null>(null);
   const open = !!badge;
 
   useEffect(() => {
@@ -90,14 +89,8 @@ export function BadgeCelebration({
       }
     };
     window.addEventListener("keydown", handler);
-    const t = window.setTimeout(() => {
-      dialogRef.current
-        ?.querySelector<HTMLButtonElement>(".badge-celebration-card__cta")
-        ?.focus();
-    }, 80);
     return () => {
       window.removeEventListener("keydown", handler);
-      window.clearTimeout(t);
     };
   }, [badge, onDismiss]);
 
@@ -163,7 +156,6 @@ export function BadgeCelebration({
         // Re-keying by badge.id forces a fresh mount per badge so the
         // medallion settle + staggered rise animations replay on each one.
         key={badge.id}
-        ref={dialogRef}
         className="badge-celebration-card"
         role="dialog"
         aria-modal="true"
