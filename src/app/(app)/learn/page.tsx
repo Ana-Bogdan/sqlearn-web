@@ -3,17 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { STRINGS } from "@/lib/constants";
-import {
-  fetchChapter,
-  fetchChapters,
-  pickResumeLesson,
-  type ChapterListItem,
-} from "@/lib/curriculum";
-
-interface ChapterWithResume extends ChapterListItem {
-  resumeHref: string | null;
-  hasLessons: boolean;
-}
+import { fetchChapters, type ChapterListItem } from "@/lib/curriculum";
 
 function clampPercent(value: number): number {
   if (!Number.isFinite(value)) return 0;
@@ -25,7 +15,7 @@ function ordinal(n: number): string {
 }
 
 export default function LearnChaptersPage() {
-  const [chapters, setChapters] = useState<ChapterWithResume[] | null>(null);
+  const [chapters, setChapters] = useState<ChapterListItem[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,33 +24,8 @@ export default function LearnChaptersPage() {
     (async () => {
       try {
         const list = await fetchChapters();
-        const sorted = [...list].sort((a, b) => a.order - b.order);
-
-        const details = await Promise.all(
-          sorted.map(async (chapter) => {
-            try {
-              const detail = await fetchChapter(chapter.id);
-              const resume = pickResumeLesson(detail.lessons);
-              const href = resume
-                ? `/learn/${chapter.id}/${resume.id}`
-                : null;
-              return {
-                ...chapter,
-                resumeHref: href,
-                hasLessons: detail.lessons.length > 0,
-              } satisfies ChapterWithResume;
-            } catch {
-              return {
-                ...chapter,
-                resumeHref: null,
-                hasLessons: false,
-              } satisfies ChapterWithResume;
-            }
-          }),
-        );
-
         if (!active) return;
-        setChapters(details);
+        setChapters([...list].sort((a, b) => a.order - b.order));
       } catch {
         if (!active) return;
         setLoadError(STRINGS.LEARN.LOAD_ERROR);
@@ -145,7 +110,7 @@ function ChapterCard({
   chapter,
   index,
 }: {
-  chapter: ChapterWithResume;
+  chapter: ChapterListItem;
   index: number;
 }) {
   const percent = clampPercent(chapter.completion_percent);
@@ -158,7 +123,8 @@ function ChapterCard({
       ? STRINGS.LEARN.IN_PROGRESS
       : STRINGS.LEARN.NOT_STARTED;
 
-  const href = chapter.resumeHref;
+  const href = `/learn/${chapter.id}`;
+  const hasContent = chapter.total_exercises > 0;
 
   const content = (
     <>
@@ -207,7 +173,7 @@ function ChapterCard({
     </>
   );
 
-  if (!href || !chapter.hasLessons) {
+  if (!hasContent) {
     return (
       <div
         className="chapter-row stagger-in opacity-70 cursor-not-allowed"

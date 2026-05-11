@@ -223,6 +223,36 @@ export const STRINGS = {
     XP_EARNED: "XP earned",
     BADGES_EARNED_LABEL: "New badges",
   },
+  CHAPTER_OVERVIEW: {
+    BACK: "All chapters",
+    OVERALL_PROGRESS: (done: number, total: number) =>
+      `${done} of ${total} exercises complete`,
+    LESSONS_HEADING: "Lessons",
+    QUIZ_HEADING: "Chapter quiz",
+    QUIZ_LOCKED_NOTE:
+      "Complete every lesson in this chapter to unlock the quiz.",
+    QUIZ_UNLOCKED_NOTE: "All lessons complete — the quiz is ready.",
+    QUIZ_NONE: "No chapter quiz has been authored yet.",
+    LESSON_LOCKED: "Locked",
+    LESSON_DONE: "Done",
+    LESSON_RESUME: "Resume",
+    LESSON_START: "Start",
+    QUIZ_TAKE: "Take the quiz",
+    QUIZ_RETAKE: "Retake the quiz",
+    QUIZ_LOCKED_TAG: "Locked",
+    CONTINUE: "Continue learning",
+    LESSON_COUNTER: (done: number, total: number) =>
+      `${done} / ${total} exercises`,
+    LOAD_ERROR: "We couldn't load this chapter. Refresh to try again.",
+  },
+  QUIZ_PAGE: {
+    BACK: "Back to chapter",
+    EYEBROW: "Chapter quiz",
+    LOAD_ERROR: "We couldn't load this quiz. Refresh to try again.",
+    LOCKED_HEADING: "Quiz locked",
+    LOCKED_BODY: (chapterTitle: string) =>
+      `Finish every lesson in ${chapterTitle} to unlock the chapter quiz.`,
+  },
   LEARN: {
     EYEBROW: "Curriculum",
     HEADING: "Your SQL journey",
@@ -256,6 +286,7 @@ export const STRINGS = {
       `${done} / ${total} exercises`,
     PREV_LESSON: "Previous Lesson",
     NEXT_LESSON: "Next Lesson",
+    NEXT_QUIZ: "Chapter quiz",
     LOADING: "Loading lesson…",
     LOAD_ERROR: "We couldn't load this lesson. Refresh to try again.",
     THEORY_EMPTY: "No theory content has been written for this lesson yet.",
@@ -355,6 +386,7 @@ export const STRINGS = {
       BODY: (title: string, count: number) =>
         `You completed all ${count} ${count === 1 ? "exercise" : "exercises"} in ${title}. Take a breath, then keep going.`,
       NEXT_LESSON: "Next lesson",
+      TAKE_QUIZ: "Take the chapter quiz",
       BACK_TO_CURRICULUM: "Back to curriculum",
       STAY_HERE: "Stay on this lesson",
     },

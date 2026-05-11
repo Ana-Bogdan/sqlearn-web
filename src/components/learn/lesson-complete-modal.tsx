@@ -12,6 +12,10 @@ interface LessonCompleteModalProps {
   badgesEarned?: Badge[];
   variant?: "lesson" | "quiz";
   onClose: () => void;
+  // When the lesson just completed is the last in a chapter that has an
+  // unlocked quiz, this fires the quiz route. Takes priority over
+  // onNextLesson so the chapter quiz becomes the obvious next step.
+  onTakeQuiz?: (() => void) | null;
   onNextLesson: (() => void) | null;
   onBackToCurriculum: () => void;
 }
@@ -23,6 +27,7 @@ export function LessonCompleteModal({
   badgesEarned,
   variant = "lesson",
   onClose,
+  onTakeQuiz,
   onNextLesson,
   onBackToCurriculum,
 }: LessonCompleteModalProps) {
@@ -117,7 +122,17 @@ export function LessonCompleteModal({
         ) : null}
 
         <div className="lesson-complete-dialog__actions">
-          {onNextLesson ? (
+          {onTakeQuiz ? (
+            <button
+              type="button"
+              onClick={onTakeQuiz}
+              data-primary="true"
+              className="lesson-complete-dialog__primary"
+            >
+              {STRINGS.EXERCISE.COMPLETE.TAKE_QUIZ}
+              <span aria-hidden="true">→</span>
+            </button>
+          ) : onNextLesson ? (
             <button
               type="button"
               onClick={onNextLesson}

@@ -225,6 +225,33 @@ export default function LessonPage({ params }: LessonPageProps) {
     router.push("/learn");
   }, [router]);
 
+  // First chapter quiz (by display order). Only relevant when the learner is
+  // on the last lesson of the chapter — at that point we offer it as the
+  // post-lesson follow-up so they don't have to bounce through the chapter
+  // overview. `chapter` may be null while the page is still loading.
+  const followupQuiz = useMemo(() => {
+    if (!chapter || navigation.next) return null;
+    const sorted = [...chapter.chapter_quizzes].sort(
+      (a, b) => a.order - b.order,
+    );
+    return sorted[0] ?? null;
+  }, [chapter, navigation.next]);
+
+  // Treat the current lesson as if it just got marked complete, since the
+  // modal that uses this fires on the moment the last exercise lands. The
+  // chapter detail in state is from initial load and won't reflect that yet.
+  const quizUnlockedNow = useMemo(() => {
+    if (!followupQuiz || !chapter || !lesson) return false;
+    return chapter.lessons.every(
+      (l) => (l.id === lesson.id ? true : l.is_completed),
+    );
+  }, [followupQuiz, chapter, lesson]);
+
+  const handleTakeQuiz = useCallback(() => {
+    if (!followupQuiz || !chapter) return;
+    router.push(`/learn/${chapter.id}/quiz/${followupQuiz.id}`);
+  }, [followupQuiz, chapter, router]);
+
   if (error) {
     return (
       <div className="mx-auto max-w-5xl px-6 py-16 lg:px-8">
@@ -329,6 +356,15 @@ export default function LessonPage({ params }: LessonPageProps) {
         chapterId={chapter.id}
         prev={navigation.prev}
         next={navigation.next}
+        quizFollowup={
+          followupQuiz
+            ? {
+                id: followupQuiz.id,
+                title: followupQuiz.title,
+                locked: !quizUnlockedNow,
+              }
+            : null
+        }
       />
 
       {toast ? (
@@ -358,6 +394,9 @@ export default function LessonPage({ params }: LessonPageProps) {
           badgesEarned={completion?.badges ?? []}
           variant={completion?.variant ?? "lesson"}
           onClose={() => setShowComplete(false)}
+          onTakeQuiz={
+            followupQuiz && quizUnlockedNow ? handleTakeQuiz : null
+          }
           onNextLesson={navigation.next ? handleGoToNextLesson : null}
           onBackToCurriculum={handleBackToCurriculum}
         />
@@ -644,12 +683,16 @@ function LessonNav({
   chapterId,
   prev,
   next,
+  quizFollowup,
 }: {
   chapterId: number;
   prev: LessonListItem | null;
   next: LessonListItem | null;
+  // Shown in the right slot when there is no next lesson — gives the
+  // learner a one-click path to the chapter quiz instead of a dead end.
+  quizFollowup: { id: number; title: string; locked: boolean } | null;
 }) {
-  if (!prev && !next) return null;
+  if (!prev && !next && !quizFollowup) return null;
 
   return (
     <nav
@@ -695,6 +738,33 @@ function LessonNav({
             </span>
             <span className="mt-1 truncate text-[0.9375rem] font-semibold text-taupe">
               {next.title}
+            </span>
+          </Link>
+        )
+      ) : quizFollowup ? (
+        quizFollowup.locked ? (
+          <div
+            className="flex cursor-not-allowed flex-col rounded-xl border border-transparent px-4 py-3 text-right opacity-70 sm:col-start-2"
+            aria-disabled="true"
+            title={STRINGS.LOCK.LESSON_TIP}
+          >
+            <span className="ml-auto inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <LockGlyph /> {STRINGS.LESSON.NEXT_QUIZ}
+            </span>
+            <span className="mt-1 truncate text-[0.9375rem] font-semibold text-taupe/65">
+              {quizFollowup.title}
+            </span>
+          </div>
+        ) : (
+          <Link
+            href={`/learn/${chapterId}/quiz/${quizFollowup.id}`}
+            className="group/nav flex flex-col rounded-xl border border-transparent px-4 py-3 text-right transition-all duration-300 ease-out hover:border-border/70 hover:bg-card/70 sm:col-start-2"
+          >
+            <span className="ml-auto inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-dusk transition-transform duration-300 group-hover/nav:translate-x-0.5">
+              {STRINGS.LESSON.NEXT_QUIZ} <ArrowRight />
+            </span>
+            <span className="mt-1 truncate text-[0.9375rem] font-semibold text-taupe">
+              {quizFollowup.title}
             </span>
           </Link>
         )
