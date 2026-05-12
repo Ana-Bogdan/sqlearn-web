@@ -1,5 +1,6 @@
 "use client";
 
+import { Flame } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BadgeIcon } from "@/components/badge-icon";
@@ -260,7 +261,7 @@ function StreakCard({ progress }: { progress: ProgressSummary }) {
         <>
           <div className="streak-line">
             <span className="streak-pulse" aria-hidden="true">
-              <FlameIcon />
+              <Flame size={18} fill="currentColor" />
             </span>
             <div className="streak-big">
               <span className="streak-big__num">{progress.current_streak}</span>
@@ -421,23 +422,6 @@ function ContinueLearning({ target }: { target: ResumeTarget | null }) {
         </span>
       </span>
     </Link>
-  );
-}
-
-function FlameIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M12 3c1.3 2.4 3.5 3.2 3.5 6.2 0 1.3-.7 2.3-1.7 2.8 0 0 1.2-2.2.2-4.2 0 0 .8 3.6-2.3 5.3-1.6.9-2.8 2.4-2.8 4.3 0 2.6 2.2 4.6 5 4.6s5-2 5-4.6c0-5-3.6-7.3-6.9-14.4z"
-        fill="currentColor"
-      />
-    </svg>
   );
 }
 
