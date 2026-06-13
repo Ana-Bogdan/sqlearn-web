@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sqlearn-web
 
-## Getting Started
+Frontend for SQLearn, a gamified SQL learning platform. It provides the learner
+interface (curriculum browsing, lessons, an in-browser SQL editor and result
+view, progress and gamification, an AI mentor panel) and an admin interface for
+managing chapters, lessons, exercises, datasets, badges, and users.
 
-First, run the development server:
+Built with Next.js 16 (App Router, React 19) and TypeScript. SQL editing uses
+CodeMirror 6 with the SQL language extension; UI components are built on
+shadcn / Base UI and Tailwind CSS v4; client state uses Zustand. It talks to the
+`sqlearn-api` backend over `fetch` with cookie-based authentication.
+
+## Prerequisites
+
+- Node.js 20.9 or later (required by Next.js 16)
+- npm (a `package-lock.json` is committed)
+- A running `sqlearn-api` backend (see that repository's README)
+
+## Setup and run
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Start the backend first so the API is reachable on port 8000. By default the
+   frontend calls `http://localhost:8000/api`, so no configuration is needed for
+   the standard local setup.
+
+   To point at a different backend, create `.env.local` and set:
+
+   ```bash
+   NEXT_PUBLIC_API_URL=http://localhost:8000/api
+   ```
+
+3. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+   Open http://localhost:3000.
+
+## Build and run for production
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm run lint` runs ESLint.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it connects to the backend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app runs on port 3000 and expects the API at `http://localhost:8000/api`,
+configurable via `NEXT_PUBLIC_API_URL` (`src/lib/api.ts`). Requests are sent with
+`credentials: "include"` so the httpOnly JWT cookies set by the backend are
+carried automatically; the client reads the `csrftoken` cookie and sends it as
+the `X-CSRFToken` header on unsafe methods. On a 401 it transparently calls
+`/auth/refresh/` once and retries. The backend's `CORS_ALLOWED_ORIGINS` must
+include `http://localhost:3000` for these credentialed requests to succeed (it
+does by default).
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/
+    (public)/   Unauthenticated routes: login, register, password reset, landing
+    (app)/      Authenticated app: dashboard, learn, sandbox, leaderboard,
+                profile, settings, and the admin section
+    layout.tsx  Root layout, fonts, global styles
+  components/   Shared and UI components
+  lib/          API client (api.ts) and per-domain helpers (auth, curriculum,
+                exercises, sandbox, gamification, mentor, admin, users)
+  stores/       Zustand stores (auth, mentor)
+public/         Static assets
+components.json  shadcn configuration
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project uses a customized Next.js 16 setup; see `AGENTS.md` for notes on
+deviations from older Next.js conventions.
