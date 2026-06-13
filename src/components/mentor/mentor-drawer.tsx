@@ -309,7 +309,6 @@ function MentorMark() {
           strokeWidth="0.6"
           strokeOpacity="0.18"
         />
-        {/* Spark — three offset dots evoking a tutor's small thought pattern */}
         <circle cx="11.5" cy="17" r="1.5" fill="#3E5570" />
         <circle cx="18" cy="17" r="1.5" fill="#3E5570" />
         <circle cx="24.5" cy="17" r="1.5" fill="#3E5570" />

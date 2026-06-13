@@ -38,7 +38,6 @@ export function MentorTrigger({
       data-active={isOpen ? "true" : undefined}
       data-has-error={hasError ? "true" : undefined}
     >
-      {/* Replays its own short pulse animation each time errorEpoch changes */}
       {hasError && !isOpen && errorEpoch != null ? (
         <span
           key={`pulse-${errorEpoch}`}
