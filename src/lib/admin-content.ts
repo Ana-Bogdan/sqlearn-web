@@ -101,8 +101,6 @@ export interface TestSolutionResult {
   rowcount: number;
 }
 
-// ---------- Chapters ----------
-
 export function fetchAdminChapters() {
   return api<AdminChapter[]>("/admin/chapters/");
 }
@@ -149,8 +147,6 @@ export function reorderAdminChapter(id: number | string, order: number) {
   });
 }
 
-// ---------- Lessons ----------
-
 export function fetchAdminLesson(id: number | string) {
   return api<AdminLesson>(`/admin/lessons/${id}/`);
 }
@@ -191,8 +187,6 @@ export function updateAdminLesson(
 export function deleteAdminLesson(id: number | string) {
   return api<void>(`/admin/lessons/${id}/`, { method: "DELETE" });
 }
-
-// ---------- Exercises ----------
 
 export function fetchAdminExercise(id: number | string) {
   return api<AdminExercise>(`/admin/exercises/${id}/`);
@@ -259,8 +253,6 @@ export function testAdminExerciseSolution(id: number | string) {
     method: "POST",
   });
 }
-
-// ---------- Datasets ----------
 
 export function fetchAdminDatasets() {
   return api<AdminDataset[]>("/admin/datasets/");

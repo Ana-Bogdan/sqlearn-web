@@ -69,8 +69,6 @@ export function LevelUpOverlay({
 }
 
 function LevelUpOrbit() {
-  // Abstract decorative SVG — concentric rings with small motes drifting
-  // around the level number. Uses existing motion utilities.
   return (
     <svg
       aria-hidden="true"

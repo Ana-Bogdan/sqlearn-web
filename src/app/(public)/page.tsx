@@ -7,13 +7,11 @@ import { STRINGS } from "@/lib/constants";
 export default function Home() {
   return (
     <div className="relative z-[2] flex min-h-0 flex-1 flex-col overflow-hidden">
-      {/* Soft warm halos */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_70%_-5%,rgba(62,85,112,0.09),transparent_60%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_15%_85%,rgba(185,153,164,0.10),transparent_55%)]" />
 
       <TiltScene className="relative mx-auto flex w-full max-w-7xl flex-1 items-center px-6 py-8 lg:px-10 lg:py-10">
         <div className="grid w-full items-center gap-x-8 gap-y-10 lg:grid-cols-12">
-          {/* Content — left, hard-aligned to col 1 */}
           <div className="lg:col-span-7 lg:col-start-1">
             <h1 aria-label={STRINGS.BRAND.NAME} className="animate-fade-up -mt-12 flex leading-none lg:-mt-20">
               <Image
@@ -74,7 +72,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Illustration — right, smaller, side-by-side */}
           <div className="hidden justify-center lg:col-span-5 lg:col-start-8 lg:flex lg:justify-end">
             <div
               className="animate-fade-in"
@@ -86,7 +83,6 @@ export default function Home() {
         </div>
       </TiltScene>
 
-      {/* Bottom rule */}
       <div className="relative mx-auto w-full max-w-7xl px-6 pb-6 lg:px-10 lg:pb-8">
         <div className="flex items-center gap-4">
           <div className="h-px flex-1 bg-taupe/15" />

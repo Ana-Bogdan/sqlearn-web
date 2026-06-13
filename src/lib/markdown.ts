@@ -89,7 +89,6 @@ function highlightSql(raw: string): string {
   while (i < n) {
     const ch = source[i];
 
-    // Line comment
     if (ch === "-" && source[i + 1] === "-") {
       const end = source.indexOf("\n", i);
       const stop = end === -1 ? n : end;
@@ -98,7 +97,6 @@ function highlightSql(raw: string): string {
       continue;
     }
 
-    // Block comment
     if (ch === "/" && source[i + 1] === "*") {
       const end = source.indexOf("*/", i + 2);
       const stop = end === -1 ? n : end + 2;
@@ -126,7 +124,6 @@ function highlightSql(raw: string): string {
       continue;
     }
 
-    // Double-quoted identifier
     if (ch === '"') {
       const end = source.indexOf('"', i + 1);
       const stop = end === -1 ? n : end + 1;
@@ -135,7 +132,6 @@ function highlightSql(raw: string): string {
       continue;
     }
 
-    // Number
     if (/[0-9]/.test(ch)) {
       let j = i;
       while (j < n && /[0-9_.]/.test(source[j])) j += 1;
@@ -144,7 +140,6 @@ function highlightSql(raw: string): string {
       continue;
     }
 
-    // Identifier / keyword
     if (/[A-Za-z_]/.test(ch)) {
       let j = i;
       while (j < n && /[A-Za-z0-9_]/.test(source[j])) j += 1;
@@ -158,7 +153,6 @@ function highlightSql(raw: string): string {
       continue;
     }
 
-    // Punctuation/operator
     if (/[=<>!+\-*/%(),;]/.test(ch)) {
       out += `<span class="tok-punct">${escapeHtml(ch)}</span>`;
       i += 1;

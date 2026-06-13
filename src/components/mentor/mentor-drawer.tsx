@@ -85,7 +85,6 @@ export function MentorDrawer({ currentSql, onInsertSql }: MentorDrawerProps) {
     };
   }, [isOpen, close]);
 
-  // Auto-scroll the thread to the bottom when messages or sending state change.
   useLayoutEffect(() => {
     if (!isOpen) return;
     const node = threadRef.current;

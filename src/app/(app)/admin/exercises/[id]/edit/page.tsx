@@ -392,7 +392,6 @@ export default function AdminExerciseEditPage({
       ) : null}
 
       <div className="exercise-editor animate-fade-up">
-        {/* Brief section */}
         <section className="exercise-editor__section">
           <SectionHeader
             eyebrow="Brief"
@@ -517,7 +516,6 @@ export default function AdminExerciseEditPage({
           </div>
         </section>
 
-        {/* Dataset section */}
         <section className="exercise-editor__section">
           <SectionHeader
             eyebrow="Dataset"
@@ -531,7 +529,6 @@ export default function AdminExerciseEditPage({
           />
         </section>
 
-        {/* Solution section */}
         <section className="exercise-editor__section">
           <SectionHeader
             eyebrow="Solution"
@@ -627,7 +624,6 @@ export default function AdminExerciseEditPage({
           </div>
         </section>
 
-        {/* Hints section */}
         <section className="exercise-editor__section">
           <SectionHeader
             eyebrow="Hints"
