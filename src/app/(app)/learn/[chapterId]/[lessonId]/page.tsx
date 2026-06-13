@@ -74,8 +74,11 @@ export default function LessonPage({ params }: LessonPageProps) {
 
     // Next 16's <Link> preserves scroll when any part of the Page element is
     // still in the viewport — which it always is when swapping lessonId on the
-    // same page.tsx — so we reset manually on lesson change.
-    window.scrollTo({ top: 0, behavior: "instant" });
+    // same page.tsx — so we reset manually on lesson change. The scroll lives
+    // on the #app-scroll container (the app shell), not the window.
+    document
+      .getElementById("app-scroll")
+      ?.scrollTo({ top: 0, behavior: "instant" });
 
     (async () => {
       try {
@@ -118,7 +121,9 @@ export default function LessonPage({ params }: LessonPageProps) {
   }, [activeTab, chapterId, lessonId, lesson]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    document
+      .getElementById("app-scroll")
+      ?.scrollTo({ top: 0, behavior: "instant" });
   }, [activeTab]);
 
   // If user lands with ?ex=123 but that id isn't in this lesson, fall back to theory.

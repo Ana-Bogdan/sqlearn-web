@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { STRINGS } from "@/lib/constants";
 import type { ExerciseHint } from "@/lib/exercises";
+import { renderTheoryMarkdown } from "@/lib/markdown";
 
 interface HintsPanelProps {
   hints: ExerciseHint[];
@@ -74,7 +75,12 @@ export function HintsPanel({ hints, revealed, onReveal }: HintsPanelProps) {
               {hints.slice(0, revealed).map((hint, idx) => (
                 <li key={hint.id} className="hint-item" style={{ animationDelay: `${idx * 40}ms` }}>
                   <span className="hint-item__num">{String(idx + 1).padStart(2, "0")}</span>
-                  <p className="hint-item__text">{hint.hint_text}</p>
+                  <div
+                    className="hint-item__text theory-prose"
+                    dangerouslySetInnerHTML={{
+                      __html: renderTheoryMarkdown(hint.hint_text),
+                    }}
+                  />
                 </li>
               ))}
             </ol>

@@ -81,11 +81,11 @@ export function Navbar() {
     : "";
 
   return (
-    <nav className="relative z-[3] border-b border-dusk/20 bg-dusk shadow-[0_1px_0_rgb(255_255_255_/_0.06)_inset]">
+    <nav className="sticky top-0 z-50 border-b border-dusk/20 bg-dusk shadow-[0_1px_0_rgb(255_255_255_/_0.06)_inset]">
       <div className="flex h-16 items-center justify-between pl-4 pr-6 lg:pr-8">
         <div className="flex items-center gap-6">
           <Link
-            href="/dashboard"
+            href={user?.role === "admin" ? "/admin" : "/dashboard"}
             aria-label={STRINGS.BRAND.NAME}
             className="inline-flex items-center"
           >
@@ -103,7 +103,12 @@ export function Navbar() {
             <div className="hidden items-center gap-1 md:flex">
               {NAV_LINKS.filter(
                 (link) => !link.adminOnly || user.role === "admin",
-              ).map((link) => {
+              )
+                .sort(
+                  (a, b) =>
+                    Number(b.adminOnly ?? false) - Number(a.adminOnly ?? false),
+                )
+                .map((link) => {
                 const active = link.match(pathname ?? "");
                 return (
                   <Link

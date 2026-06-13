@@ -14,6 +14,7 @@ import {
   type SubmissionOutcome,
 } from "@/lib/exercises";
 import type { Badge, GamificationResult } from "@/lib/gamification";
+import { renderTheoryMarkdown } from "@/lib/markdown";
 import { useMentorStore } from "@/stores/mentor-store";
 import { BadgeCelebration } from "./badge-celebration";
 import { HintsPanel } from "./hints-panel";
@@ -237,6 +238,10 @@ export function ExerciseWorkspace({
   }, [detail]);
 
   const instructions = useMemo(() => detail?.instructions ?? "", [detail]);
+  const instructionsHtml = useMemo(
+    () => (instructions ? renderTheoryMarkdown(instructions) : ""),
+    [instructions],
+  );
   const positionLabel = useMemo(() => {
     if (!detail) return null;
     const idx = lessonExerciseOrder.indexOf(detail.id);
@@ -294,15 +299,11 @@ export function ExerciseWorkspace({
             ) : null}
           </div>
 
-          {instructions ? (
+          {instructionsHtml ? (
             <div
-              className="exercise-brief__instructions"
-              // Instructions are plain text; preserve line breaks.
-            >
-              {instructions.split(/\n{2,}/).map((para, idx) => (
-                <p key={idx}>{para}</p>
-              ))}
-            </div>
+              className="exercise-brief__instructions theory-prose"
+              dangerouslySetInnerHTML={{ __html: instructionsHtml }}
+            />
           ) : (
             <p className="exercise-brief__empty">
               {STRINGS.EXERCISE.BRIEF.EMPTY_INSTRUCTIONS}

@@ -40,8 +40,8 @@ export function LoginForm() {
     setPending(true);
 
     try {
-      await login({ email, password });
-      router.replace("/dashboard");
+      const user = await login({ email, password });
+      router.replace(user.role === "admin" ? "/admin" : "/dashboard");
     } catch (error) {
       const body = error instanceof ApiError ? error.body : null;
       const parsed = parseApiError(body);

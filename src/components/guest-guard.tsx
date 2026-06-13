@@ -7,12 +7,13 @@ import { useAuthStore } from "@/stores/auth-store";
 export function GuestGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const status = useAuthStore((state) => state.status);
+  const role = useAuthStore((state) => state.user?.role);
 
   useEffect(() => {
     if (status === "authenticated") {
-      router.replace("/dashboard");
+      router.replace(role === "admin" ? "/admin" : "/dashboard");
     }
-  }, [status, router]);
+  }, [status, role, router]);
 
   return <>{children}</>;
 }

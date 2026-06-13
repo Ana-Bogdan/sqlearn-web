@@ -115,6 +115,47 @@
 }
 
 /* ──────────────────────────────────────────────────────────
+   Global custom scrollbar — taupe thumb on a faint track,
+   matching the scoped scrollbars used in lesson tabs and the
+   mentor drawer. Applies app-wide to any scrollable element.
+   ────────────────────────────────────────────────────────── */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(70, 60, 51, 0.28) transparent;
+}
+
+/* WebKit (Chrome, Safari, Edge).
+   Scoped scrollbars (e.g. .lesson-tabs, .mentor-drawer__thread) override
+   width/colour with higher specificity, so they keep their slimmer look —
+   this global rule deliberately avoids the transparent-border inset trick
+   so it can't cascade a border into those thinner bars and erase them. */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(70, 60, 51, 0.28);
+  border-radius: 999px;
+  transition: background-color 200ms var(--ease-out-quart);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(70, 60, 51, 0.45);
+}
+
+/* Keep the page corner (where both bars meet) unobtrusive. */
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ──────────────────────────────────────────────────────────
    Motion system
    ────────────────────────────────────────────────────────── */
 
@@ -4262,7 +4303,13 @@
     border-bottom: none;
     border-right: 1px dashed rgba(70, 60, 51, 0.22);
     padding: 2.4rem 1.9rem 2rem;
-    min-height: calc(100vh - 4rem);
+    position: sticky;
+    /* The scroll container (<main>) now starts below the navbar, so the
+       sidebar sticks to the top of that container rather than offset by 4rem. */
+    top: 0;
+    align-self: start;
+    height: calc(100vh - 4rem);
+    overflow-y: auto;
   }
 }
 
