@@ -78,6 +78,3 @@ src/
 public/         Static assets
 components.json  shadcn configuration
 ```
-
-This project uses a customized Next.js 16 setup; see `AGENTS.md` for notes on
-deviations from older Next.js conventions.
